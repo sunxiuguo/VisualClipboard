@@ -252,10 +252,12 @@
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10",
     "webpack-merge": "^4.1.4",
-    "yarn": "^1.12.3"
+    "yarn": "^1.12.3",
+    "@hot-loader/react-dom": "^16.8.6"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.5.0",
+    "core-js": "^2.6.6",
     "devtron": "^1.4.0",
     "electron-debug": "^2.0.0",
     "electron-log": "^2.2.17",
