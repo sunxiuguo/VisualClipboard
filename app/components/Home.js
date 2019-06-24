@@ -7,6 +7,7 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import mainListItems from './listItems';
@@ -105,7 +106,7 @@ export default function Dashboard() {
             >
                 <div className={classes.toolbarIcon}>
                     <IconButton onClick={handleDrawerClose}>
-                        {/* <ChevronLeftIcon /> */}
+                        <ChevronLeftIcon />
                     </IconButton>
                 </div>
                 <Divider />
