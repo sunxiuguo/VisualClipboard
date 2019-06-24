@@ -16,9 +16,8 @@ function MadeWithLove() {
         <Typography variant="body2" color="textSecondary" align="center">
             {'Built with love by the '}
             <Link color="inherit" href="https://material-ui.com/">
-                Material-UI
+                sunxiuguo1@qq.com
             </Link>
-            {' team.'}
         </Typography>
     );
 }
@@ -88,7 +87,7 @@ export default function Dashboard() {
     const [open, setOpen] = React.useState(true);
 
     const handleDrawerClose = () => {
-        setOpen(false);
+        setOpen(!open);
     };
 
     return (
