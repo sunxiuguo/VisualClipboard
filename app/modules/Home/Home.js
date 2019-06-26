@@ -31,16 +31,19 @@ function MadeWithLove() {
 
 const LIST_ITEMS = [
     {
+        id: 1,
         type: 'text',
         label: '文本',
         icon: <DashboardIcon />
     },
     {
+        id: 2,
         type: 'image',
         label: '图像',
         icon: <ShoppingCartIcon />
     },
     {
+        id: 3,
         type: 'html',
         label: 'HTML',
         icon: <PeopleIcon />
@@ -64,7 +67,11 @@ export default function Dashboard() {
 
     const renderListMenuItems = () =>
         LIST_ITEMS.map(item => (
-            <ListItem button onClick={() => handleClickItem(item.type)}>
+            <ListItem
+                button
+                onClick={() => handleClickItem(item.type)}
+                key={item.id}
+            >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.label} />
             </ListItem>
