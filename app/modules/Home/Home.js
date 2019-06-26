@@ -37,6 +37,10 @@ export default function Dashboard() {
         setOpen(!open);
     };
 
+    const handleClickItem = type => {
+        console.log(type);
+    };
+
     const renderArrowIcon = () =>
         open ? <ChevronLeftIcon /> : <ChevronRightIcon />;
 
@@ -60,19 +64,19 @@ export default function Dashboard() {
                 </div>
                 <Divider />
                 <List>
-                    <ListItem button>
+                    <ListItem button onClick={() => handleClickItem('text')}>
                         <ListItemIcon>
                             <DashboardIcon />
                         </ListItemIcon>
                         <ListItemText primary="文本" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button onClick={() => handleClickItem('image')}>
                         <ListItemIcon>
                             <ShoppingCartIcon />
                         </ListItemIcon>
                         <ListItemText primary="图像" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button onClick={() => handleClickItem('html')}>
                         <ListItemIcon>
                             <PeopleIcon />
                         </ListItemIcon>
