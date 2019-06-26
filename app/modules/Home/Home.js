@@ -29,6 +29,24 @@ function MadeWithLove() {
     );
 }
 
+const LIST_ITEMS = [
+    {
+        type: 'text',
+        label: '文本',
+        icon: <DashboardIcon />
+    },
+    {
+        type: 'image',
+        label: '图像',
+        icon: <ShoppingCartIcon />
+    },
+    {
+        type: 'html',
+        label: 'HTML',
+        icon: <PeopleIcon />
+    }
+];
+
 export default function Dashboard() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
@@ -43,6 +61,14 @@ export default function Dashboard() {
 
     const renderArrowIcon = () =>
         open ? <ChevronLeftIcon /> : <ChevronRightIcon />;
+
+    const renderListMenuItems = () =>
+        LIST_ITEMS.map(item => (
+            <ListItem button onClick={() => handleClickItem(item.type)}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.label} />
+            </ListItem>
+        ));
 
     return (
         <div className={classes.root}>
@@ -63,30 +89,13 @@ export default function Dashboard() {
                     </IconButton>
                 </div>
                 <Divider />
-                <List>
-                    <ListItem button onClick={() => handleClickItem('text')}>
-                        <ListItemIcon>
-                            <DashboardIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="文本" />
-                    </ListItem>
-                    <ListItem button onClick={() => handleClickItem('image')}>
-                        <ListItemIcon>
-                            <ShoppingCartIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="图像" />
-                    </ListItem>
-                    <ListItem button onClick={() => handleClickItem('html')}>
-                        <ListItemIcon>
-                            <PeopleIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="HTML" />
-                    </ListItem>
-                </List>
+                <List>{renderListMenuItems()}</List>
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
-                <Container maxWidth="lg" className={classes.container} />
+                <Container maxWidth="lg" className={classes.container}>
+                    <List>111</List>
+                </Container>
 
                 <MadeWithLove />
             </main>
