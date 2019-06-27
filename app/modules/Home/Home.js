@@ -17,6 +17,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import useStyles from './config/UseStyles';
+// import Db from '../../utils/IndexedDB';
 
 function MadeWithLove() {
     return (
