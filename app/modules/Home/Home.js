@@ -60,18 +60,20 @@ export default function Dashboard() {
 
     useEffect(() => {
         const getContent = async () => {
+            console.log(`useEffect`, type);
             const contentArray = await Db.get(type);
             console.log(contentArray);
             setContent(contentArray);
         };
         getContent();
-    }, []);
+    }, [type]);
 
     const handleDrawerClose = () => {
         setOpen(!open);
     };
 
     const handleClickItem = _type => {
+        console.log(_type);
         setType(_type);
     };
 
