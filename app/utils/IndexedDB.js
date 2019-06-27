@@ -23,6 +23,7 @@ export default class DataBase {
      * @param {*} data 新增的记录
      */
     async add(storeName, data) {
+        // 需要去重
         await this.db[storeName].add(data);
         return this.get(storeName);
     }

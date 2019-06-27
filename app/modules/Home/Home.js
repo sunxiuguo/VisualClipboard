@@ -17,7 +17,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import useStyles from './config/UseStyles';
-// import Db from '../../utils/IndexedDB';
+import DataBase from '../../utils/IndexedDB';
 
 function MadeWithLove() {
     return (
@@ -52,6 +52,7 @@ const LIST_ITEMS = [
 ];
 
 export default function Dashboard() {
+    const Db = new DataBase();
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
 
@@ -61,6 +62,7 @@ export default function Dashboard() {
 
     const handleClickItem = type => {
         console.log(type);
+        addItem();
     };
 
     const renderArrowIcon = () =>
@@ -77,6 +79,13 @@ export default function Dashboard() {
                 <ListItemText primary={item.label} />
             </ListItem>
         ));
+
+    const addItem = () => {
+        Db.add('text', {
+            createTime: Date.now(),
+            content: 'aaaaaa'
+        });
+    };
 
     return (
         <div className={classes.root}>
