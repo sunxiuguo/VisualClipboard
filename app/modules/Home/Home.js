@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -54,15 +54,25 @@ const LIST_ITEMS = [
 export default function Dashboard() {
     const Db = new DataBase();
     const classes = useStyles();
+    const [type, setType] = React.useState('text');
     const [open, setOpen] = React.useState(true);
+    const [conents, setContent] = React.useState([]);
+
+    useEffect(() => {
+        const getContent = async () => {
+            const contentArray = await Db.get(type);
+            console.log(contentArray);
+            setContent(contentArray);
+        };
+        getContent();
+    }, []);
 
     const handleDrawerClose = () => {
         setOpen(!open);
     };
 
-    const handleClickItem = type => {
-        console.log(type);
-        addItem();
+    const handleClickItem = _type => {
+        setType(_type);
     };
 
     const renderArrowIcon = () =>
@@ -79,13 +89,6 @@ export default function Dashboard() {
                 <ListItemText primary={item.label} />
             </ListItem>
         ));
-
-    const addItem = () => {
-        Db.add('text', {
-            createTime: Date.now(),
-            content: 'aaaaaa'
-        });
-    };
 
     return (
         <div className={classes.root}>
@@ -111,7 +114,13 @@ export default function Dashboard() {
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>
-                    <List>111</List>
+                    <List>
+                        {conents.map(item => (
+                            <ListItem key={item.createTime}>
+                                {item.content}
+                            </ListItem>
+                        ))}
+                    </List>
                 </Container>
 
                 <MadeWithLove />
