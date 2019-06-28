@@ -15,11 +15,16 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import useStyles from './config/UseStyles';
 import DataBase from '../../utils/IndexedDB';
 import ClipBoard from '../../utils/Clipboard';
+import DateFormat from '../../utils/date';
 
 const clipBoard = new ClipBoard();
 clipBoard.startWatching();
@@ -123,15 +128,31 @@ export default function Dashboard() {
                 <List>{renderListMenuItems()}</List>
             </Drawer>
             <main className={classes.content}>
-                <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>
-                    <List>
-                        {contents.map(item => (
-                            <ListItem key={item.createTime}>
-                                {item.content}
-                            </ListItem>
-                        ))}
-                    </List>
+                    {contents.map(item => (
+                        <ExpansionPanel
+                            key={item.id}
+                            TransitionProps={{ unmountOnExit: true }}
+                        >
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography className={classes.expansionHeader}>
+                                    {DateFormat(item.createTime)}
+                                </Typography>
+                                <Typography
+                                    className={classes.expansionSecondaryHeader}
+                                >
+                                    {item.content}
+                                </Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                                <Typography>{item.content}</Typography>
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                    ))}
                     <Button onClick={() => clearStore('text')}>
                         清除text记录
                     </Button>

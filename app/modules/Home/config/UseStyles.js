@@ -17,6 +17,19 @@ const useStyles = makeStyles(theme => ({
     title: {
         flexGrow: 1
     },
+    expansionHeader: {
+        fontSize: theme.typography.pxToRem(15),
+        flexBasis: '33.33%',
+        flexShrink: 0
+    },
+    expansionSecondaryHeader: {
+        fontSize: theme.typography.pxToRem(15),
+        color: theme.palette.text.secondary,
+        width: theme.typography.pxToRem(500),
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap'
+    },
     drawerPaper: {
         position: 'relative',
         whiteSpace: 'nowrap',
