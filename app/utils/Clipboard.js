@@ -1,5 +1,6 @@
-import { clipboard } from 'electron';
 import DataBase from './IndexedDB';
+
+const { clipboard } = require('electron');
 
 const Db = new DataBase();
 
@@ -33,10 +34,12 @@ export default class Clipboard {
                     )
                 ) {
                     this.previousImage = clipboard.readImage();
-                    Db.add('image', {
-                        createTime: Date.now(),
-                        content: this.previousImage
-                    });
+                    if (this.previousImage) {
+                        Db.add('image', {
+                            createTime: Date.now(),
+                            content: this.previousImage.toDataURL()
+                        });
+                    }
                 }
             }, 500);
         }

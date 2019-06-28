@@ -106,6 +106,47 @@ export default function Dashboard() {
             </ListItem>
         ));
 
+    const renderTextList = () =>
+        contents.map(item => (
+            <ExpansionPanel
+                key={item.id}
+                TransitionProps={{ unmountOnExit: true }}
+            >
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography className={classes.expansionHeader}>
+                        {DateFormat(item.createTime)}
+                    </Typography>
+                    <Typography className={classes.expansionSecondaryHeader}>
+                        {item.content}
+                    </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Typography>{item.content}</Typography>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+        ));
+
+    const renderImageList = () => {};
+
+    const renderHtmlList = () => {};
+
+    const renderContentList = () => {
+        switch (type) {
+            case 'text':
+                return renderTextList();
+            case 'image':
+                return renderImageList();
+            case 'html':
+                return renderHtmlList();
+            default:
+                return '未识别的类型';
+        }
+    };
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -129,30 +170,7 @@ export default function Dashboard() {
             </Drawer>
             <main className={classes.content}>
                 <Container maxWidth="lg" className={classes.container}>
-                    {contents.map(item => (
-                        <ExpansionPanel
-                            key={item.id}
-                            TransitionProps={{ unmountOnExit: true }}
-                        >
-                            <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1a-content"
-                                id="panel1a-header"
-                            >
-                                <Typography className={classes.expansionHeader}>
-                                    {DateFormat(item.createTime)}
-                                </Typography>
-                                <Typography
-                                    className={classes.expansionSecondaryHeader}
-                                >
-                                    {item.content}
-                                </Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <Typography>{item.content}</Typography>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                    ))}
+                    {renderContentList()}
                     <Button onClick={() => clearStore('text')}>
                         清除text记录
                     </Button>
