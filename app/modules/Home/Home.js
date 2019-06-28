@@ -18,6 +18,10 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import useStyles from './config/UseStyles';
 import DataBase from '../../utils/IndexedDB';
+import ClipBoard from '../../utils/Clipboard';
+
+const clipBoard = new ClipBoard();
+clipBoard.startWatching();
 
 function MadeWithLove() {
     return (
@@ -56,24 +60,24 @@ export default function Dashboard() {
     const classes = useStyles();
     const [type, setType] = React.useState('text');
     const [open, setOpen] = React.useState(true);
-    const [conents, setContent] = React.useState([]);
+    const [contents, setContent] = React.useState([]);
 
     useEffect(() => {
-        const getContent = async () => {
-            console.log(`useEffect`, type);
+        let getContent = async () => {
             const contentArray = await Db.get(type);
-            console.log(contentArray);
             setContent(contentArray);
         };
         getContent();
-    }, [type]);
+        return () => {
+            getContent = null;
+        };
+    });
 
     const handleDrawerClose = () => {
         setOpen(!open);
     };
 
     const handleClickItem = _type => {
-        console.log(_type);
         setType(_type);
     };
 
@@ -117,7 +121,7 @@ export default function Dashboard() {
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>
                     <List>
-                        {conents.map(item => (
+                        {contents.map(item => (
                             <ListItem key={item.createTime}>
                                 {item.content}
                             </ListItem>

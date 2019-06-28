@@ -24,8 +24,11 @@ export default class DataBase {
      */
     async add(storeName, data) {
         // 需要去重
-        await this.db[storeName].add(data);
-        return this.get(storeName);
+        try {
+            await this.db[storeName].add(data);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     /**
@@ -33,7 +36,12 @@ export default class DataBase {
      * @param {*} storeName
      */
     async get(storeName) {
-        return this.db[storeName].toArray();
+        try {
+            const res = this.db[storeName].toArray();
+            return res;
+        } catch (e) {
+            return [];
+        }
     }
 
     /**
@@ -41,7 +49,10 @@ export default class DataBase {
      * @param {*} storeName
      */
     async delete(storeName) {
-        await this.db[storeName].clear();
-        return this.get(storeName);
+        try {
+            await this.db[storeName].clear();
+        } catch (e) {
+            console.error(e);
+        }
     }
 }

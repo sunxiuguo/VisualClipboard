@@ -1,61 +1,61 @@
-const { clipboard } = require('electron');
-const { EventEmitter } = require('events');
+import { clipboard } from 'electron';
+import DataBase from './IndexedDB';
 
-const clipboardEmitter = new EventEmitter();
-let watcherId = null;
-let previousText = clipboard.readText();
-let previousImage = clipboard.readImage();
+const Db = new DataBase();
 
-clipboard.on = (event, listener) => {
-    clipboardEmitter.on(event, listener);
-    return clipboard;
-};
-
-clipboard.once = (event, listener) => {
-    clipboardEmitter.once(event, listener);
-    return clipboard;
-};
-
-clipboard.off = (event, listener) => {
-    if (listener) {
-        clipboardEmitter.removeListener(event, listener);
-    } else {
-        clipboardEmitter.removeAllListeners(event);
+export default class Clipboard {
+    constructor() {
+        this.watcherId = null;
+        this.previousText = clipboard.readText();
+        this.previousImage = clipboard.readImage();
     }
-    return clipboard;
-};
 
-clipboard.startWatching = () => {
-    if (!watcherId) {
-        // todo 使用node-schedule来做定时任务
-        watcherId = setInterval(() => {
-            previousText = clipboard.readText();
-            if (isDiffText(previousText, previousText)) {
-                clipboardEmitter.emit('text-changed');
-            }
-            previousImage = clipboard.readImage();
-            if (isDiffImage(previousImage, previousImage)) {
-                clipboardEmitter.emit('image-changed');
-            }
-        }, 500);
+    startWatching = () => {
+        if (!this.watcherId) {
+            // todo 使用node-schedule来做定时任务
+            this.watcherId = setInterval(() => {
+                if (
+                    Clipboard.isDiffText(
+                        this.previousText,
+                        clipboard.readText()
+                    )
+                ) {
+                    this.previousText = clipboard.readText();
+                    Db.add('text', {
+                        createTime: Date.now(),
+                        content: this.previousText
+                    });
+                }
+                if (
+                    Clipboard.isDiffImage(
+                        this.previousImage,
+                        clipboard.readImage()
+                    )
+                ) {
+                    this.previousImage = clipboard.readImage();
+                    Db.add('image', {
+                        createTime: Date.now(),
+                        content: this.previousImage
+                    });
+                }
+            }, 500);
+        }
+        return clipboard;
+    };
+
+    stopWatching = () => {
+        if (this.watcherId) {
+            clearInterval(this.watcherId);
+        }
+        this.watcherId = null;
+        return clipboard;
+    };
+
+    static isDiffText(str1, str2) {
+        return str2 && str1 !== str2;
     }
-    return clipboard;
-};
 
-clipboard.stopWatching = () => {
-    if (watcherId) {
-        clearInterval(watcherId);
+    static isDiffImage(img1, img2) {
+        return !img2.isEmpty() && img1.toDataURL() !== img2.toDataURL();
     }
-    watcherId = null;
-    return clipboard;
-};
-
-function isDiffText(str1, str2) {
-    return str2 && str1 !== str2;
 }
-
-function isDiffImage(img1, img2) {
-    return !img2.isEmpty() && img1.toDataURL() !== img2.toDataURL();
-}
-
-module.exports = clipboard;

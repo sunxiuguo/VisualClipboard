@@ -14,10 +14,6 @@ import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import DataBase from './utils/IndexedDB';
-
-const Db = new DataBase();
-const clipboard = require('./utils/Clipboard');
 
 export default class AppUpdater {
     constructor() {
@@ -73,21 +69,6 @@ app.on('ready', async () => {
         await installExtensions();
     }
 
-    clipboard
-        .on('text-changed', () => {
-            Db.add('text', {
-                createTime: Date.now(),
-                content: clipboard.readText()
-            });
-        })
-        .on('image-changed', () => {
-            Db.add('image', {
-                createTime: Date.now(),
-                content: clipboard.readImage()
-            });
-        })
-        .startWatching();
-
     mainWindow = new BrowserWindow({
         show: false,
         width: 1024,
@@ -112,9 +93,6 @@ app.on('ready', async () => {
 
     mainWindow.on('closed', () => {
         mainWindow = null;
-        clipboard.off('text-changed');
-        clipboard.off('image-changed');
-        clipboard.stopWatching();
     });
 
     const menuBuilder = new MenuBuilder(mainWindow);
