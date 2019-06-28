@@ -6,6 +6,7 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
@@ -81,6 +82,10 @@ export default function Dashboard() {
         setType(_type);
     };
 
+    const clearStore = _type => {
+        Db.delete(_type);
+    };
+
     const renderArrowIcon = () =>
         open ? <ChevronLeftIcon /> : <ChevronRightIcon />;
 
@@ -127,6 +132,9 @@ export default function Dashboard() {
                             </ListItem>
                         ))}
                     </List>
+                    <Button onClick={() => clearStore('text')}>
+                        清除text记录
+                    </Button>
                 </Container>
 
                 <MadeWithLove />
