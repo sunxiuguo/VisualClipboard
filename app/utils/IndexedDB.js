@@ -25,6 +25,13 @@ export default class DataBase {
     async add(storeName, data) {
         // 需要去重
         try {
+            const existItems = this.db[storeName]
+                .where('content')
+                .equalsIgnoreCase(data.content)
+                .toArray();
+            if (existItems.length) {
+                return;
+            }
             await this.db[storeName].add(data);
         } catch (e) {
             console.error(e);
