@@ -26,7 +26,7 @@ import Link from '@material-ui/core/Link';
 import useStyles from './config/UseStyles';
 import DataBase from '../../utils/IndexedDB';
 import ClipBoard from '../../utils/Clipboard';
-import DateFormat from '../../utils/date';
+import DateFormat from '../../utils/Utils';
 
 const clipBoard = new ClipBoard();
 clipBoard.startWatching();
