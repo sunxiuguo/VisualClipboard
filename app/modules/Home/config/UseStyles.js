@@ -17,6 +17,12 @@ const useStyles = makeStyles(theme => ({
     title: {
         flexGrow: 1
     },
+    imgRoot: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        backgroundColor: theme.palette.background.paper
+    },
     expansionHeader: {
         fontSize: theme.typography.pxToRem(15),
         flexBasis: '33.33%',

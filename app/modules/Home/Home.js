@@ -19,6 +19,8 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import useStyles from './config/UseStyles';
@@ -130,7 +132,21 @@ export default function Dashboard() {
             </ExpansionPanel>
         ));
 
-    const renderImageList = () => {};
+    const renderImageList = () => (
+        <div className={classes.imgRoot}>
+            <GridList
+                cellHeight="auto"
+                className={classes.imgGridList}
+                cols={4}
+            >
+                {contents.map(item => (
+                    <GridListTile key={Math.random()} cols={2}>
+                        <img src={item.content} alt="哈哈哈哈" />
+                    </GridListTile>
+                ))}
+            </GridList>
+        </div>
+    );
 
     const renderHtmlList = () => {};
 
