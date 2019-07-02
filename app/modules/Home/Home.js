@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -27,6 +27,7 @@ import useStyles from './config/UseStyles';
 import DataBase from '../../utils/IndexedDB';
 import ClipBoard from '../../utils/Clipboard';
 import DateFormat from '../../utils/Utils';
+import useInterval from '../../utils/UseInterval';
 
 const clipBoard = new ClipBoard();
 clipBoard.startWatching();
@@ -70,16 +71,13 @@ export default function Dashboard() {
     const [open, setOpen] = React.useState(true);
     const [contents, setContent] = React.useState([]);
 
-    useEffect(() => {
-        let getContent = async () => {
+    useInterval(() => {
+        const getContent = async () => {
             const contentArray = await Db.get(type);
             setContent(contentArray);
         };
         getContent();
-        return () => {
-            getContent = null;
-        };
-    });
+    }, 500);
 
     const handleDrawerClose = () => {
         setOpen(!open);
