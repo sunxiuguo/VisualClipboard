@@ -74,7 +74,9 @@ export default function Dashboard() {
     useInterval(() => {
         const getContent = async () => {
             const contentArray = await Db.get(type);
-            setContent(contentArray);
+            if (JSON.stringify(contentArray) !== JSON.stringify(contents)) {
+                setContent(contentArray);
+            }
         };
         getContent();
     }, 500);
