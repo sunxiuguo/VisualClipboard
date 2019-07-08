@@ -25,7 +25,7 @@ export default class DataBase {
     async add(storeName, data) {
         // 需要去重
         try {
-            const existItems = this.db[storeName]
+            const existItems = await this.db[storeName]
                 .where('content')
                 .equalsIgnoreCase(data.content)
                 .toArray();
@@ -44,7 +44,7 @@ export default class DataBase {
      */
     async get(storeName) {
         try {
-            const res = this.db[storeName].toArray();
+            const res = await this.db[storeName].toArray();
             return res;
         } catch (e) {
             return [];
