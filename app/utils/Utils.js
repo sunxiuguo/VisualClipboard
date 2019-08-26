@@ -6,7 +6,8 @@ export default function DateFormat(timestamp) {
     const day = date.getDate();
     const hour = date.getHours();
     const minute = date.getMinutes();
-    const seconds = date.getSeconds();
+    const seconds =
+        date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds();
 
     return `${year}-${month}-${day} ${hour}:${minute}:${seconds}`;
 }
