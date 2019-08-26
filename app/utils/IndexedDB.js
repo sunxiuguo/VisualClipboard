@@ -2,6 +2,7 @@
  * Use Dexie
  */
 const Dexie = require('dexie');
+const { DereplicateArray } = require('./Utils');
 
 export default class DataBase {
     constructor() {
@@ -45,7 +46,8 @@ export default class DataBase {
     async get(storeName) {
         try {
             const res = await this.db[storeName].toArray();
-            return res.sort((a, b) => b.createTime - a.createTime);
+            const sortedList = res.sort((a, b) => b.createTime - a.createTime);
+            return DereplicateArray(sortedList, 'content');
         } catch (e) {
             return [];
         }
