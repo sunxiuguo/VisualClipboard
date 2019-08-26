@@ -13,8 +13,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import TextFieldsIcon from '@material-ui/icons/TextFields';
+import ImageIcon from '@material-ui/icons/Image';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -48,13 +48,13 @@ const LIST_ITEMS = [
         id: 1,
         type: 'text',
         label: '文本',
-        icon: <DashboardIcon />
+        icon: <TextFieldsIcon />
     },
     {
         id: 2,
         type: 'image',
         label: '图像',
-        icon: <ShoppingCartIcon />
+        icon: <ImageIcon />
     }
 ];
 
