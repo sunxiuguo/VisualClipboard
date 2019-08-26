@@ -45,7 +45,7 @@ export default class DataBase {
     async get(storeName) {
         try {
             const res = await this.db[storeName].toArray();
-            return res;
+            return res.sort((a, b) => b.createTime - a.createTime);
         } catch (e) {
             return [];
         }
