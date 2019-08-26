@@ -23,16 +23,16 @@ export default class DataBase {
      * @param {*} data 新增的记录
      */
     async add(storeName, data) {
-        // 需要去重
         try {
-            const existItems = await this.db[storeName]
+            const currentRecords = this.db[storeName]
                 .where('content')
-                .equalsIgnoreCase(data.content)
-                .toArray();
+                .equalsIgnoreCase(data.content);
+            const existItems = await currentRecords.toArray();
             if (existItems.length) {
-                return;
+                await currentRecords.modify({ createTime: data.createTime });
+            } else {
+                await this.db[storeName].add(data);
             }
-            await this.db[storeName].add(data);
         } catch (e) {
             console.error(e);
         }
