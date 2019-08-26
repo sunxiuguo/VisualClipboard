@@ -156,16 +156,12 @@ export default function Dashboard() {
         </div>
     );
 
-    const renderHtmlList = () => {};
-
     const renderContentList = () => {
         switch (type) {
             case 'text':
                 return renderTextList();
             case 'image':
                 return renderImageList();
-            case 'html':
-                return renderHtmlList();
             default:
                 return '未识别的类型';
         }
