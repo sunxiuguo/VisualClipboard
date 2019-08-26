@@ -13,7 +13,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -55,12 +54,6 @@ const LIST_ITEMS = [
         type: 'image',
         label: '图像',
         icon: <ShoppingCartIcon />
-    },
-    {
-        id: 3,
-        type: 'html',
-        label: 'HTML',
-        icon: <PeopleIcon />
     }
 ];
 
@@ -69,16 +62,31 @@ export default function Dashboard() {
     const classes = useStyles();
     const [type, setType] = React.useState('text');
     const [open, setOpen] = React.useState(true);
-    const [contents, setContent] = React.useState([]);
+    const [imageList, setImageList] = React.useState([]);
+    const [textList, setTextList] = React.useState([]);
 
     useInterval(() => {
-        const getContent = async () => {
-            const contentArray = await Db.get(type);
-            if (JSON.stringify(contentArray) !== JSON.stringify(contents)) {
-                setContent(contentArray);
+        const getTextList = async () => {
+            const textArray = await Db.get('text');
+            if (JSON.stringify(textArray) !== JSON.stringify(textList)) {
+                setTextList(textArray);
             }
         };
-        getContent();
+        if (type === 'text') {
+            getTextList();
+        }
+    }, 500);
+
+    useInterval(() => {
+        const getImageList = async () => {
+            const imageArray = await Db.get('image');
+            if (JSON.stringify(imageArray) !== JSON.stringify(imageList)) {
+                setImageList(imageArray);
+            }
+        };
+        if (type === 'image') {
+            getImageList();
+        }
     }, 500);
 
     const handleDrawerClose = () => {
@@ -109,7 +117,7 @@ export default function Dashboard() {
         ));
 
     const renderTextList = () =>
-        contents.map(item => (
+        textList.map(item => (
             <ExpansionPanel
                 key={item.id}
                 TransitionProps={{ unmountOnExit: true }}
@@ -139,7 +147,7 @@ export default function Dashboard() {
                 className={classes.imgGridList}
                 cols={4}
             >
-                {contents.map(item => (
+                {imageList.map(item => (
                     <GridListTile key={Math.random()} cols={2}>
                         <img src={item.content} alt="哈哈哈哈" />
                     </GridListTile>
@@ -189,6 +197,9 @@ export default function Dashboard() {
                     {renderContentList()}
                     <Button onClick={() => clearStore('text')}>
                         清除text记录
+                    </Button>
+                    <Button onClick={() => clearStore('image')}>
+                        清除image记录
                     </Button>
                 </Container>
 
