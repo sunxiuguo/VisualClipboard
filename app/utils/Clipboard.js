@@ -56,7 +56,13 @@ export default class Clipboard {
         return str2 && str1 !== str2;
     }
 
-    static isDiffImage(img1, img2) {
-        return !img2.isEmpty() && img1.toDataURL() !== img2.toDataURL();
+    static isDiffImage(preImage, currentImage) {
+        if (!preImage) {
+            return true;
+        }
+        return (
+            !currentImage.isEmpty() &&
+            preImage.toDataURL() !== currentImage.toDataURL()
+        );
     }
 }
