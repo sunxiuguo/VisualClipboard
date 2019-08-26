@@ -23,6 +23,10 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'space-around',
         backgroundColor: theme.palette.background.paper
     },
+    gridPaper: {
+        padding: theme.spacing(2),
+        background: '#FF7400'
+    },
     expansionHeader: {
         fontSize: theme.typography.pxToRem(15),
         flexBasis: '33.33%',

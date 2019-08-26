@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -80,8 +81,11 @@ export default function Dashboard() {
     useInterval(() => {
         const getImageList = async () => {
             const imageArray = await Db.get('image');
-            if (JSON.stringify(imageArray) !== JSON.stringify(imageList)) {
-                setImageList(imageArray);
+            const avaliableArray = imageArray.filter(
+                item => item.content.length > 'data:image/png;base64,'.length
+            );
+            if (JSON.stringify(avaliableArray) !== JSON.stringify(imageList)) {
+                setImageList(avaliableArray);
             }
         };
         if (type === 'image') {
@@ -145,11 +149,24 @@ export default function Dashboard() {
             <GridList
                 cellHeight="auto"
                 className={classes.imgGridList}
-                cols={4}
+                cols={2}
             >
                 {imageList.map(item => (
-                    <GridListTile key={Math.random()} cols={2}>
-                        <img src={item.content} alt="哈哈哈哈" />
+                    <GridListTile
+                        key={Math.random()}
+                        cols={2}
+                        className={classes.imgFullWidth}
+                    >
+                        <Paper className={classes.gridPaper}>
+                            <img
+                                src={item.content}
+                                alt=""
+                                style={{
+                                    width: '100%',
+                                    height: `(1 / ${item.ratio}) * 100%`
+                                }}
+                            />
+                        </Paper>
                     </GridListTile>
                 ))}
             </GridList>
