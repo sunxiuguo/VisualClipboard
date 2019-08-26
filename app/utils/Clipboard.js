@@ -46,7 +46,8 @@ export default class Clipboard {
             if (this.previousImage) {
                 Db.add('image', {
                     createTime: Date.now(),
-                    content: this.previousImage.toDataURL()
+                    content: this.previousImage.toDataURL(),
+                    ratio: this.previousImage.getAspectRatio() // 图片长宽比
                 });
             }
         }
