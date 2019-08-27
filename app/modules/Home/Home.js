@@ -10,11 +10,13 @@ import List from '@material-ui/core/List';
 //   MuiPickersUtilsProvider,
 //   DateTimePicker
 // } from '@material-ui/pickers';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
@@ -78,6 +80,7 @@ export default function Dashboard() {
     const [imageList, setImageList] = React.useState([]);
     const [textList, setTextList] = React.useState([]);
     const [searchWords, setSearchWords] = React.useState('');
+    const [anchorEl, setAnchorEl] = React.useState(null);
     // const [selectedStartDate, setStartDate] = React.useState(0);
     // const [selectedEndDate, setEndDate] = React.useState(0);
 
@@ -123,6 +126,7 @@ export default function Dashboard() {
 
     const clearStore = _type => {
         Db.delete(_type);
+        handleCloseMenu();
     };
 
     const renderArrowIcon = () =>
@@ -208,6 +212,14 @@ export default function Dashboard() {
         setSearchWords(e.currentTarget.value);
     };
 
+    const handleClickMenu = e => {
+        setAnchorEl(e.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
+
     // const handleStartDateChange = (date) => {
     //     setStartDate(new Date(date).getTime());
     // }
@@ -245,9 +257,26 @@ export default function Dashboard() {
                             className={classes.menuButton}
                             color="inherit"
                             aria-label="open drawer"
+                            aria-haspopup="true"
+                            onClick={handleClickMenu}
+                            aria-controls="simple-menu"
                         >
                             <MenuIcon />
                         </IconButton>
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleCloseMenu}
+                        >
+                            <MenuItem onClick={() => clearStore('text')}>
+                                清空文本记录
+                            </MenuItem>
+                            <MenuItem onClick={() => clearStore('image')}>
+                                清空图片记录
+                            </MenuItem>
+                        </Menu>
                         <Typography
                             className={classes.SearchBarTitle}
                             variant="h6"
@@ -298,12 +327,6 @@ export default function Dashboard() {
                 </MuiPickersUtilsProvider> */}
                 <Container maxWidth="lg" className={classes.container}>
                     {renderContentList()}
-                    <Button onClick={() => clearStore('text')}>
-                        清除text记录
-                    </Button>
-                    <Button onClick={() => clearStore('image')}>
-                        清除image记录
-                    </Button>
                 </Container>
 
                 <MadeWithLove />
