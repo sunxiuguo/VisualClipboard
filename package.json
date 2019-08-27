@@ -57,8 +57,8 @@
   },
   "main": "./app/main.prod.js",
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.develar.ElectronReact",
+    "productName": "VisualClipboard",
+    "appId": "org.develar.VisualClipboard",
     "files": [
       "app/dist/",
       "app/app.html",
@@ -111,8 +111,8 @@
     "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
   },
   "author": {
-    "name": "Electron React Boilerplte Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
+    "name": "VisualClipboard Maintainers",
+    "email": "sunxiuguo1@qq.com",
     "url": "https://electron-react-boilerplate.js.org"
   },
   "contributors": [
