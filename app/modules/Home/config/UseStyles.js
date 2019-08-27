@@ -111,6 +111,12 @@ const useStyles = makeStyles(theme => ({
         paddingBottom: theme.spacing(4),
         height: '100vh',
         overflow: 'auto'
+    },
+    leftButton: {
+        width: '80%',
+        marginTop: theme.spacing(2),
+        marginLeft: 'auto',
+        marginRight: 'auto'
     }
 }));
 

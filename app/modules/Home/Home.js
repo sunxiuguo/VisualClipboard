@@ -3,7 +3,6 @@ import clsx from 'clsx';
 // import 'date-fns';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
 // import Grid from '@material-ui/core/Grid';
 // import DateFnsUtils from '@date-io/date-fns';
 // import {
@@ -16,12 +15,9 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-// import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import ImageIcon from '@material-ui/icons/Image';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -134,14 +130,16 @@ export default function Dashboard() {
 
     const renderListMenuItems = () =>
         LIST_ITEMS.map(item => (
-            <ListItem
-                button
+            <Button
+                variant="contained"
+                color={type === item.type ? 'primary' : ''}
+                className={classes.leftButton}
                 onClick={() => handleClickItem(item.type)}
                 key={item.id}
             >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.label} />
-            </ListItem>
+                {item.label}
+                {item.icon}
+            </Button>
         ));
 
     const renderTextList = () =>
@@ -247,7 +245,7 @@ export default function Dashboard() {
                     </IconButton>
                 </div>
                 <Divider />
-                <List>{renderListMenuItems()}</List>
+                {renderListMenuItems()}
             </Drawer>
             <main className={classes.content}>
                 <AppBar position="static">
