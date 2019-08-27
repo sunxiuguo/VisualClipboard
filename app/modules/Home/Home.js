@@ -70,10 +70,16 @@ export default function Dashboard() {
     const [open, setOpen] = React.useState(true);
     const [imageList, setImageList] = React.useState([]);
     const [textList, setTextList] = React.useState([]);
+    const [searchWords, setSearchWords] = React.useState('');
 
     useInterval(() => {
         const getTextList = async () => {
-            const textArray = await Db.get('text');
+            let textArray = await Db.get('text');
+            if (searchWords) {
+                textArray = textArray.filter(
+                    item => item.content.indexOf(searchWords) > -1
+                );
+            }
             if (JSON.stringify(textArray) !== JSON.stringify(textList)) {
                 setTextList(textArray);
             }
@@ -189,6 +195,10 @@ export default function Dashboard() {
         }
     };
 
+    const onSearchInputChange = e => {
+        setSearchWords(e.currentTarget.value);
+    };
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -234,6 +244,7 @@ export default function Dashboard() {
                             </div>
                             <InputBase
                                 placeholder="Search…"
+                                onChange={onSearchInputChange}
                                 classes={{
                                     root: classes.inputRoot,
                                     input: classes.inputInput
