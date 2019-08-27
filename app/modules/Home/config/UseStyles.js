@@ -56,6 +56,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'flex-end',
         padding: '0 8px',
+        marginTop: theme.spacing(2),
         ...theme.mixins.toolbar
     },
     imgRoot: {

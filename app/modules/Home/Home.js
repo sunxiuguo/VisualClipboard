@@ -132,7 +132,7 @@ export default function Dashboard() {
         LIST_ITEMS.map(item => (
             <Button
                 variant="contained"
-                color={type === item.type ? 'primary' : ''}
+                color={type === item.type ? 'primary' : 'default'}
                 className={classes.leftButton}
                 onClick={() => handleClickItem(item.type)}
                 key={item.id}
