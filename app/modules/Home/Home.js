@@ -22,6 +22,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Container from '@material-ui/core/Container';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import InputBase from '@material-ui/core/InputBase';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
 import Link from '@material-ui/core/Link';
 import useStyles from './config/UseStyles';
 import DataBase from '../../utils/IndexedDB';
@@ -206,6 +211,38 @@ export default function Dashboard() {
                 <List>{renderListMenuItems()}</List>
             </Drawer>
             <main className={classes.content}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton
+                            edge="start"
+                            className={classes.menuButton}
+                            color="inherit"
+                            aria-label="open drawer"
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography
+                            className={classes.SearchBarTitle}
+                            variant="h6"
+                            noWrap
+                        >
+                            VisualClipboard
+                        </Typography>
+                        <div className={classes.search}>
+                            <div className={classes.searchIcon}>
+                                <SearchIcon />
+                            </div>
+                            <InputBase
+                                placeholder="Search…"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput
+                                }}
+                                inputProps={{ 'aria-label': 'search' }}
+                            />
+                        </div>
+                    </Toolbar>
+                </AppBar>
                 <Container maxWidth="lg" className={classes.container}>
                     {renderContentList()}
                     <Button onClick={() => clearStore('text')}>

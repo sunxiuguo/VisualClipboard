@@ -1,11 +1,55 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, fade } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex'
     },
-    toolbar: {
-        paddingRight: 24 // keep right padding when drawer closed
+    menuButton: {
+        marginRight: theme.spacing(2)
+    },
+    SearchBarTitle: {
+        flexGrow: 1,
+        display: 'none',
+        [theme.breakpoints.up('sm')]: {
+            display: 'block'
+        }
+    },
+    search: {
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: fade(theme.palette.common.white, 0.15),
+        '&:hover': {
+            backgroundColor: fade(theme.palette.common.white, 0.25)
+        },
+        marginLeft: 0,
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            marginLeft: theme.spacing(1),
+            width: 'auto'
+        }
+    },
+    searchIcon: {
+        width: theme.spacing(7),
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    inputRoot: {
+        color: 'inherit'
+    },
+    inputInput: {
+        padding: theme.spacing(1, 1, 1, 7),
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            width: 120,
+            '&:focus': {
+                width: 200
+            }
+        }
     },
     toolbarIcon: {
         display: 'flex',
@@ -13,9 +57,6 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'flex-end',
         padding: '0 8px',
         ...theme.mixins.toolbar
-    },
-    title: {
-        flexGrow: 1
     },
     imgRoot: {
         display: 'flex',
@@ -60,24 +101,16 @@ const useStyles = makeStyles(theme => ({
             width: theme.spacing(8)
         }
     },
-    appBarSpacer: theme.mixins.toolbar,
     content: {
         flexGrow: 1,
-        height: '100vh',
-        overflow: 'auto'
+        height: '100vh'
+        // overflow: 'auto'
     },
     container: {
         paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(4)
-    },
-    paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        overflow: 'auto',
-        flexDirection: 'column'
-    },
-    fixedHeight: {
-        height: 240
+        paddingBottom: theme.spacing(4),
+        height: '100vh',
+        overflow: 'auto'
     }
 }));
 
