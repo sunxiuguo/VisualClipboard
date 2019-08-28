@@ -1,14 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
-// import 'date-fns';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-// import Grid from '@material-ui/core/Grid';
-// import DateFnsUtils from '@date-io/date-fns';
-// import {
-//   MuiPickersUtilsProvider,
-//   DateTimePicker
-// } from '@material-ui/pickers';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
@@ -161,7 +156,10 @@ export default function Dashboard() {
                     </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography>{item.content}</Typography>
+                    <TextareaAutosize
+                        defaultValue={item.content}
+                        className={classes.textArea}
+                    />
                 </ExpansionPanelDetails>
             </ExpansionPanel>
         ));
@@ -298,31 +296,6 @@ export default function Dashboard() {
                         </div>
                     </Toolbar>
                 </AppBar>
-                {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid
-                        container
-                        justify="space-around"
-                    >
-                        <DateTimePicker
-                            variant="inline"
-                            format="yyyy/MM/dd HH:mm"
-                            margin="normal"
-                            inputVariant="outlined"
-                            label="开始时间"
-                            value={selectedStartDate}
-                            onChange={handleStartDateChange}
-                        />
-                        <DateTimePicker
-                            variant="inline"
-                            format="yyyy/MM/dd HH:mm"
-                            margin="normal"
-                            inputVariant="outlined"
-                            label="结束时间"
-                            value={selectedEndDate}
-                            onChange={handleEndDateChange}
-                        />
-                    </Grid>
-                </MuiPickersUtilsProvider> */}
                 <Container maxWidth="lg" className={classes.container}>
                     {renderContentList()}
                 </Container>

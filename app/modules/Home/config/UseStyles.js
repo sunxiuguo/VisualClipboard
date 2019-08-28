@@ -7,6 +7,18 @@ const useStyles = makeStyles(theme => ({
     menuButton: {
         marginRight: theme.spacing(2)
     },
+    textArea: {
+        '&:focus': {
+            outline: 'none'
+        },
+        overflow: 'hidden',
+        border: 0,
+        width: '100%',
+        height: 'auto',
+        fontSize: '1rem',
+        fontWeight: 500,
+        resize: 'none'
+    },
     SearchBarTitle: {
         flexGrow: 1,
         display: 'none',
