@@ -207,7 +207,11 @@ export default function Dashboard() {
         <div className={classes.imgRoot}>
             <GridList className={classes.imgGridList} cols={4}>
                 {dateImages.map(item => (
-                    <GridListTile key={item.id} cols={1}>
+                    <GridListTile
+                        key={item.id}
+                        cols={1}
+                        style={{ background: 'rgb(220, 239, 237)' }}
+                    >
                         <img
                             src={item.content}
                             alt={DateFormat(item.createTime)}
