@@ -77,9 +77,21 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'space-around',
         backgroundColor: theme.palette.background.paper
     },
+    imgGridList: {
+        width: '100%',
+        height: '100%'
+    },
     gridPaper: {
         padding: theme.spacing(2),
         background: '#FF7400'
+    },
+    gridItem: {
+        boxShadow:
+            '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
+        padding: 0,
+        marginBottom: '1rem',
+        borderRadius: theme.shape.borderRadius,
+        backgroundImage: 'linear-gradient(54deg, #e5e5e5 0%, #F5F5F5 97%)'
     },
     expansionHeader: {
         fontSize: theme.typography.pxToRem(15),

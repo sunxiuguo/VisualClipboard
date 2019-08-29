@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import React from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -6,9 +7,9 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -21,6 +22,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import Container from '@material-ui/core/Container';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -72,8 +74,6 @@ export default function Dashboard() {
     const [textList, setTextList] = React.useState([]);
     const [searchWords, setSearchWords] = React.useState('');
     const [anchorEl, setAnchorEl] = React.useState(null);
-    // const [selectedStartDate, setStartDate] = React.useState(0);
-    // const [selectedEndDate, setEndDate] = React.useState(0);
 
     useInterval(() => {
         const getTextList = async () => {
@@ -98,14 +98,31 @@ export default function Dashboard() {
             const avaliableArray = imageArray.filter(
                 item => item.content.length > 'data:image/png;base64,'.length
             );
-            if (JSON.stringify(avaliableArray) !== JSON.stringify(imageList)) {
-                setImageList(avaliableArray);
+
+            const imageListByDate = splitImageByDate(avaliableArray);
+
+            if (JSON.stringify(imageListByDate) !== JSON.stringify(imageList)) {
+                setImageList(imageListByDate);
             }
         };
         if (type === 'image') {
             getImageList();
         }
     }, 500);
+
+    const splitImageByDate = allImages => {
+        const dateArrayMap = {};
+        for (let i = 0; i < allImages.length; i++) {
+            const item = allImages[i];
+            const date = DateFormat(item.createTime, true);
+            if (!dateArrayMap[date]) {
+                dateArrayMap[date] = [item];
+            } else {
+                dateArrayMap[date].push(item);
+            }
+        }
+        return Object.values(dateArrayMap);
+    };
 
     const handleDrawerClose = () => {
         setOpen(!open);
@@ -164,29 +181,37 @@ export default function Dashboard() {
             </ExpansionPanel>
         ));
 
-    const renderImageList = () => (
+    const renderDateImageList = () => (
         <div className={classes.imgRoot}>
-            <GridList
-                cellHeight="auto"
-                className={classes.imgGridList}
-                cols={2}
-            >
-                {imageList.map(item => (
+            <GridList className={classes.imgGridList} cols={4}>
+                {imageList.map(dateImages => (
                     <GridListTile
-                        key={Math.random()}
-                        cols={2}
-                        className={classes.imgFullWidth}
+                        key={dateImages[0].createTime}
+                        cols={4}
+                        style={{ height: 'auto' }}
+                        className={classes.gridItem}
                     >
-                        <Paper className={classes.gridPaper}>
-                            <img
-                                src={item.content}
-                                alt=""
-                                style={{
-                                    width: '100%',
-                                    height: `(1 / ${item.ratio}) * 100%`
-                                }}
-                            />
-                        </Paper>
+                        <ListSubheader component="div">
+                            <Typography variant="h6" color="textSecondary">
+                                {DateFormat(dateImages[0].createTime, true)}
+                            </Typography>
+                        </ListSubheader>
+                        {renderImageList(dateImages)}
+                    </GridListTile>
+                ))}
+            </GridList>
+        </div>
+    );
+
+    const renderImageList = dateImages => (
+        <div className={classes.imgRoot}>
+            <GridList className={classes.imgGridList} cols={4}>
+                {dateImages.map(item => (
+                    <GridListTile key={item.id} cols={1}>
+                        <img
+                            src={item.content}
+                            alt={DateFormat(item.createTime)}
+                        />
                     </GridListTile>
                 ))}
             </GridList>
@@ -198,7 +223,7 @@ export default function Dashboard() {
             case 'text':
                 return renderTextList();
             case 'image':
-                return renderImageList();
+                return renderDateImageList();
             default:
                 return '未识别的类型';
         }
@@ -215,14 +240,6 @@ export default function Dashboard() {
     const handleCloseMenu = () => {
         setAnchorEl(null);
     };
-
-    // const handleStartDateChange = (date) => {
-    //     setStartDate(new Date(date).getTime());
-    // }
-
-    // const handleEndDateChange = (date) => {
-    //     setEndDate(new Date(date).getTime());
-    // }
 
     return (
         <div className={classes.root}>
