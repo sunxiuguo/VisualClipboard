@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import Modal from '@material-ui/core/Modal';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -74,6 +75,8 @@ export default function Dashboard() {
     const [textList, setTextList] = React.useState([]);
     const [searchWords, setSearchWords] = React.useState('');
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [modalOpen, setModalOpen] = React.useState(false);
+    const [modalImageSrc, setModalImageSrc] = React.useState('');
 
     useInterval(() => {
         const getTextList = async () => {
@@ -135,6 +138,15 @@ export default function Dashboard() {
     const clearStore = _type => {
         Db.delete(_type);
         handleCloseMenu();
+    };
+
+    const handleClickImage = imageSrc => {
+        setModalImageSrc(imageSrc);
+        setModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
     };
 
     const renderArrowIcon = () =>
@@ -211,6 +223,7 @@ export default function Dashboard() {
                         key={item.id}
                         cols={1}
                         style={{ background: 'rgb(220, 239, 237)' }}
+                        onClick={() => handleClickImage(item.content)}
                     >
                         <img
                             src={item.content}
@@ -233,6 +246,30 @@ export default function Dashboard() {
         }
     };
 
+    const renderModal = () => (
+        <Modal
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            open={modalOpen}
+            onClose={handleCloseModal}
+        >
+            <div
+                style={{
+                    top: `50%`,
+                    left: `50%`,
+                    transform: `translate(-50%, -50%)`
+                }}
+                className={classes.modalContainer}
+            >
+                <img
+                    src={modalImageSrc}
+                    alt="查看大图"
+                    style={{ width: '100%' }}
+                />
+            </div>
+        </Modal>
+    );
+
     const onSearchInputChange = e => {
         setSearchWords(e.currentTarget.value);
     };
@@ -247,6 +284,7 @@ export default function Dashboard() {
 
     return (
         <div className={classes.root}>
+            {renderModal()}
             <CssBaseline />
             <Drawer
                 variant="permanent"

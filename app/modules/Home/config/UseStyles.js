@@ -143,6 +143,14 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(2),
         marginLeft: 'auto',
         marginRight: 'auto'
+    },
+    modalContainer: {
+        position: 'absolute',
+        width: theme.spacing(80),
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3)
     }
 }));
 
