@@ -144,9 +144,13 @@ const useStyles = makeStyles(theme => ({
         marginLeft: 'auto',
         marginRight: 'auto'
     },
+    modal: {
+        overflow: 'scroll'
+    },
     modalContainer: {
         position: 'absolute',
         width: theme.spacing(100),
+        maxHeight: '90%',
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5]

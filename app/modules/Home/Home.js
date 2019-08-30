@@ -252,6 +252,7 @@ export default function Dashboard() {
             aria-describedby="simple-modal-description"
             open={modalOpen}
             onClose={handleCloseModal}
+            className={classes.modal}
         >
             <div
                 style={{
