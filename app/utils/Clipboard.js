@@ -7,6 +7,8 @@ const fs = require('fs');
 
 const Db = new DataBase();
 const hostPath = `${__dirname}/temp`;
+const jpegQualityLow = 1;
+const jpegQualityHigh = 30;
 
 function xMkdirSync(dirname) {
     if (!fs.existsSync(dirname)) {
@@ -20,7 +22,9 @@ export default class Clipboard {
     constructor() {
         this.watcherId = null;
         this.previousText = clipboard.readText();
-        this.previousImageMd5 = md5(clipboard.readImage().toPNG());
+        this.previousImageMd5 = md5(
+            clipboard.readImage().toJPEG(jpegQualityHigh)
+        );
     }
 
     startWatching = () => {
@@ -53,22 +57,24 @@ export default class Clipboard {
 
     static writeImage() {
         const nativeImage = clipboard.readImage();
-        const pngBuffer = nativeImage.toPNG();
-        const md5String = md5(pngBuffer);
+        const jpegBuffer = nativeImage.toJPEG(jpegQualityHigh);
+        const md5String = md5(jpegBuffer);
+
+        const jpegBufferLow = nativeImage.toJPEG(jpegQualityLow);
+        const md5StringLow = md5(jpegBufferLow);
 
         if (Clipboard.isDiffText(this.previousImageMd5, md5String)) {
             this.previousImageMd5 = md5String;
             if (!nativeImage.isEmpty()) {
-                const path = `${hostPath}/${md5String}.png`;
-                fs.writeFile(path, pngBuffer, err => {
-                    if (!err) {
-                        Db.add('image', {
-                            createTime: Date.now(),
-                            content: path
-                        });
-                    } else {
-                        console.error(err);
-                    }
+                const path = `${hostPath}/${md5String}.jpeg`;
+                const pathLow = `${hostPath}/${md5StringLow}.jpeg`;
+                fs.writeFileSync(path, jpegBuffer);
+                fs.writeFileSync(pathLow, jpegBufferLow);
+
+                Db.add('image', {
+                    createTime: Date.now(),
+                    content: path,
+                    contentLow: pathLow
                 });
             }
         }

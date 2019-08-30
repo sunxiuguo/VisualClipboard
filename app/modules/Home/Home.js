@@ -226,7 +226,7 @@ export default function Dashboard() {
                         onClick={() => handleClickImage(item.content)}
                     >
                         <img
-                            src={item.content}
+                            src={item.contentLow}
                             alt={DateFormat(item.createTime)}
                         />
                     </GridListTile>
