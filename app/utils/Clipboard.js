@@ -41,8 +41,9 @@ export default class Clipboard {
     }
 
     static writeImage() {
-        if (Clipboard.isDiffImage(this.previousImage, clipboard.readImage())) {
-            this.previousImage = clipboard.readImage();
+        const clipboardImage = clipboard.readImage();
+        if (Clipboard.isDiffImage(this.previousImage, clipboardImage)) {
+            this.previousImage = clipboardImage;
             if (this.previousImage) {
                 Db.add('image', {
                     createTime: Date.now(),
