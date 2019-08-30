@@ -24,7 +24,7 @@ export default class DataBase {
      * @param {*} data 新增的记录
      */
     async add(storeName, data) {
-        try {
+        this.db.transaction('rw', this.db[storeName], async () => {
             const currentRecords = this.db[storeName]
                 .where('content')
                 .equalsIgnoreCase(data.content);
@@ -34,9 +34,7 @@ export default class DataBase {
             } else {
                 await this.db[storeName].add(data);
             }
-        } catch (e) {
-            console.error(e);
-        }
+        });
     }
 
     /**
@@ -44,13 +42,11 @@ export default class DataBase {
      * @param {*} storeName
      */
     async get(storeName) {
-        try {
-            const res = await this.db[storeName].toArray();
-            const sortedList = res.sort((a, b) => b.createTime - a.createTime);
-            return DereplicateArray(sortedList, 'content');
-        } catch (e) {
-            return [];
-        }
+        const res = await this.db.transaction('r', this.db[storeName], () =>
+            this.db[storeName].toArray()
+        );
+        const sortedList = res.sort((a, b) => b.createTime - a.createTime);
+        return DereplicateArray(sortedList, 'content');
     }
 
     /**
