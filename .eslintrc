@@ -43,6 +43,7 @@
         "promise/catch-or-return": "error",
         "promise/no-native": "off",
         "import/prefer-default-export": "off",
+        "react/prop-types": "off",
         "react/sort-comp": [
             "error",
             {

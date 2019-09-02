@@ -93,19 +93,6 @@ const useStyles = makeStyles(theme => ({
         borderRadius: theme.shape.borderRadius,
         backgroundImage: 'linear-gradient(54deg, #e5e5e5 0%, #F5F5F5 97%)'
     },
-    expansionHeader: {
-        fontSize: theme.typography.pxToRem(15),
-        flexBasis: '33.33%',
-        flexShrink: 0
-    },
-    expansionSecondaryHeader: {
-        fontSize: theme.typography.pxToRem(15),
-        color: theme.palette.text.secondary,
-        width: theme.typography.pxToRem(500),
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap'
-    },
     drawerPaper: {
         position: 'relative',
         whiteSpace: 'nowrap',
@@ -154,6 +141,34 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5]
+    },
+    textCard: {
+        maxWidth: '100%',
+        width: '100%',
+        paddingBottom: theme.spacing(2)
+    },
+    textMedia: {
+        height: 70,
+        minHeight: 70
+    },
+    textItemContentContainer: {
+        height: 120,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around'
+    },
+    textItemContent: {
+        fontSize: theme.typography.body1,
+        color: theme.palette.text.primary,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        /*! autoprefixer: off */
+        WebkitBoxOrient: 'vertical'
+    },
+    textItemTime: {
+        color: theme.palette.text.secondary
     }
 }));
 

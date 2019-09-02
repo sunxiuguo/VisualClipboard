@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-import React from 'react';
+import React, { forwardRef } from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -10,17 +10,18 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import { FixedSizeList } from 'react-window';
 
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import ImageIcon from '@material-ui/icons/Image';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import ListSubheader from '@material-ui/core/ListSubheader';
@@ -36,6 +37,7 @@ import DataBase from '../../utils/IndexedDB';
 import ClipBoard from '../../utils/Clipboard';
 import DateFormat from '../../utils/DateFormat';
 import useInterval from '../../utils/UseInterval';
+import bannerImage from '../../assets/banner3.jpeg';
 
 const clipBoard = new ClipBoard();
 clipBoard.startWatching();
@@ -66,6 +68,9 @@ const LIST_ITEMS = [
     }
 ];
 
+const clientHeight = window.innerHeight || document.body.clientHeight;
+const textItemGutter = 16;
+
 export default function Dashboard() {
     const Db = new DataBase();
     const classes = useStyles();
@@ -77,6 +82,7 @@ export default function Dashboard() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [modalOpen, setModalOpen] = React.useState(false);
     const [modalImageSrc, setModalImageSrc] = React.useState('');
+    const [modalTextContent, setModalTextContent] = React.useState('');
 
     useInterval(() => {
         const getTextList = async () => {
@@ -142,7 +148,14 @@ export default function Dashboard() {
         setModalOpen(true);
     };
 
+    const handleClickText = content => {
+        setModalTextContent(content);
+        setModalOpen(true);
+    };
+
     const handleCloseModal = () => {
+        setModalTextContent('');
+        setModalImageSrc('');
         setModalOpen(false);
     };
 
@@ -163,32 +176,38 @@ export default function Dashboard() {
             </Button>
         ));
 
-    const renderTextList = () =>
-        textList.map(item => (
-            <ExpansionPanel
-                key={item.id}
-                TransitionProps={{ unmountOnExit: true }}
+    const renderTextItem = props => {
+        const { index, data, style } = props;
+        const item = data[index];
+
+        return (
+            <Card
+                className={classes.textCard}
+                key={index}
+                style={{
+                    ...style,
+                    top: style.top + textItemGutter,
+                    height: style.height - textItemGutter
+                }}
             >
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <Typography className={classes.expansionHeader}>
-                        {DateFormat.format(item.createTime)}
-                    </Typography>
-                    <Typography className={classes.expansionSecondaryHeader}>
-                        {item.content}
-                    </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <TextareaAutosize
-                        defaultValue={item.content}
-                        className={classes.textArea}
+                <CardActionArea onClick={() => handleClickText(item.content)}>
+                    <CardMedia
+                        component="img"
+                        className={classes.textMedia}
+                        image={bannerImage}
                     />
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-        ));
+                    <CardContent className={classes.textItemContentContainer}>
+                        <Typography className={classes.textItemContent}>
+                            {item.content}
+                        </Typography>
+                        <Typography className={classes.textItemTime}>
+                            {DateFormat.format(item.createTime)}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        );
+    };
 
     const renderDateImageList = () => (
         <div className={classes.imgRoot}>
@@ -235,10 +254,32 @@ export default function Dashboard() {
         </div>
     );
 
+    const innerElementType = forwardRef(({ style, ...rest }, ref) => (
+        <div
+            ref={ref}
+            style={{
+                ...style,
+                paddingTop: textItemGutter
+            }}
+            {...rest}
+        />
+    ));
+
     const renderContentList = () => {
         switch (type) {
             case 'text':
-                return renderTextList();
+                return (
+                    <FixedSizeList
+                        height={clientHeight}
+                        width="100%"
+                        itemSize={190}
+                        itemCount={textList.length}
+                        itemData={textList}
+                        innerElementType={innerElementType}
+                    >
+                        {renderTextItem}
+                    </FixedSizeList>
+                );
             case 'image':
                 return renderDateImageList();
             default:
@@ -262,14 +303,30 @@ export default function Dashboard() {
                 }}
                 className={classes.modalContainer}
             >
+                {renderModalBody()}
+            </div>
+        </Modal>
+    );
+
+    const renderModalBody = () => {
+        if (modalImageSrc) {
+            return (
                 <img
                     src={modalImageSrc}
                     alt="查看大图"
                     style={{ width: '100%' }}
                 />
-            </div>
-        </Modal>
-    );
+            );
+        }
+        if (modalTextContent) {
+            return (
+                <TextareaAutosize
+                    defaultValue={modalTextContent}
+                    className={classes.textArea}
+                />
+            );
+        }
+    };
 
     const onSearchInputChange = e => {
         setSearchWords(e.currentTarget.value);
