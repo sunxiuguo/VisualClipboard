@@ -209,28 +209,45 @@ export default function Dashboard() {
         );
     };
 
+    const renderDateImageItem = props => {
+        const { index, data, style } = props;
+        const dateImages = data[index];
+
+        return (
+            <GridListTile
+                key={index}
+                style={{
+                    ...style,
+                    top: style.top + textItemGutter,
+                    height: style.height - textItemGutter
+                }}
+                className={classes.gridItem}
+            >
+                <ListSubheader component="div">
+                    <Typography variant="h6" color="textSecondary">
+                        {DateFormat.format(
+                            dateImages[0].createTime,
+                            'YYYY-MM-DD'
+                        )}
+                    </Typography>
+                </ListSubheader>
+                {renderImageList(dateImages)}
+            </GridListTile>
+        );
+    };
+
     const renderDateImageList = () => (
         <div className={classes.imgRoot}>
-            <GridList className={classes.imgGridList} cols={4}>
-                {imageList.map(dateImages => (
-                    <GridListTile
-                        key={dateImages[0].createTime}
-                        cols={4}
-                        style={{ height: 'auto' }}
-                        className={classes.gridItem}
-                    >
-                        <ListSubheader component="div">
-                            <Typography variant="h6" color="textSecondary">
-                                {DateFormat.format(
-                                    dateImages[0].createTime,
-                                    'YYYY-MM-DD'
-                                )}
-                            </Typography>
-                        </ListSubheader>
-                        {renderImageList(dateImages)}
-                    </GridListTile>
-                ))}
-            </GridList>
+            <FixedSizeList
+                height={clientHeight}
+                width="100%"
+                itemSize={400}
+                itemCount={imageList.length}
+                itemData={imageList}
+                innerElementType={innerElementType}
+            >
+                {renderDateImageItem}
+            </FixedSizeList>
         </div>
     );
 

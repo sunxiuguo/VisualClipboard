@@ -2,7 +2,8 @@ import { makeStyles, fade } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        display: 'flex'
+        display: 'flex',
+        overflow: 'hidden'
     },
     menuButton: {
         marginRight: theme.spacing(2)
@@ -79,7 +80,7 @@ const useStyles = makeStyles(theme => ({
     },
     imgGridList: {
         width: '100%',
-        height: '100%'
+        height: 360
     },
     gridPaper: {
         padding: theme.spacing(2),
