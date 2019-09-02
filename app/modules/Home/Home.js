@@ -34,7 +34,7 @@ import Link from '@material-ui/core/Link';
 import useStyles from './config/UseStyles';
 import DataBase from '../../utils/IndexedDB';
 import ClipBoard from '../../utils/Clipboard';
-import DateFormat from '../../utils/Utils';
+import DateFormat from '../../utils/DateFormat';
 import useInterval from '../../utils/UseInterval';
 
 const clipBoard = new ClipBoard();
@@ -117,7 +117,7 @@ export default function Dashboard() {
         const dateArrayMap = {};
         for (let i = 0; i < allImages.length; i++) {
             const item = allImages[i];
-            const date = DateFormat(item.createTime, true);
+            const date = DateFormat.format(item.createTime, 'YYYY-MM-DD');
             if (!dateArrayMap[date]) {
                 dateArrayMap[date] = [item];
             } else {
@@ -178,7 +178,7 @@ export default function Dashboard() {
                     id="panel1a-header"
                 >
                     <Typography className={classes.expansionHeader}>
-                        {DateFormat(item.createTime)}
+                        {DateFormat.format(item.createTime)}
                     </Typography>
                     <Typography className={classes.expansionSecondaryHeader}>
                         {item.content}
@@ -205,7 +205,10 @@ export default function Dashboard() {
                     >
                         <ListSubheader component="div">
                             <Typography variant="h6" color="textSecondary">
-                                {DateFormat(dateImages[0].createTime, true)}
+                                {DateFormat.format(
+                                    dateImages[0].createTime,
+                                    'YYYY-MM-DD'
+                                )}
                             </Typography>
                         </ListSubheader>
                         {renderImageList(dateImages)}
@@ -227,7 +230,7 @@ export default function Dashboard() {
                     >
                         <img
                             src={item.contentLow}
-                            alt={DateFormat(item.createTime)}
+                            alt={DateFormat.format(item.createTime)}
                         />
                     </GridListTile>
                 ))}
