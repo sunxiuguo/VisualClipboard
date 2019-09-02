@@ -5,6 +5,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Modal from '@material-ui/core/Modal';
+import Fade from '@material-ui/core/Fade';
+import Backdrop from '@material-ui/core/Backdrop';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -311,17 +313,24 @@ export default function Dashboard() {
             open={modalOpen}
             onClose={handleCloseModal}
             className={classes.modal}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+                timeout: 500
+            }}
         >
-            <div
-                style={{
-                    top: `50%`,
-                    left: `50%`,
-                    transform: `translate(-50%, -50%)`
-                }}
-                className={classes.modalContainer}
-            >
-                {renderModalBody()}
-            </div>
+            <Fade in={modalOpen}>
+                <div
+                    style={{
+                        top: `50%`,
+                        left: `50%`,
+                        transform: `translate(-50%, -50%)`
+                    }}
+                    className={classes.modalContainer}
+                >
+                    {renderModalBody()}
+                </div>
+            </Fade>
         </Modal>
     );
 
