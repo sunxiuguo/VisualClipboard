@@ -13,7 +13,7 @@ export default class DataBase {
     init() {
         this.db.version(1).stores({
             text: '++id,createTime,content',
-            image: '++id,createTime,content',
+            image: '++id,createTime,content,contentLow',
             html: '++id,createTime,content'
         });
     }
@@ -59,5 +59,14 @@ export default class DataBase {
         } catch (e) {
             console.error(e);
         }
+    }
+
+    async deleteByTimestamp(storeName, expiredTime) {
+        this.db.transaction('rw', this.db[storeName], async () => {
+            await this.db[storeName]
+                .where('createTime')
+                .below(expiredTime)
+                .delete();
+        });
     }
 }

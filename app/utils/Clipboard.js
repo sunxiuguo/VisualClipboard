@@ -1,9 +1,11 @@
 import DataBase from './IndexedDB';
+import DateFormat from './DateFormat';
 
 const { clipboard } = require('electron');
 const schedule = require('node-schedule');
 const md5 = require('md5');
 const fs = require('fs');
+const rimraf = require('rimraf');
 
 const Db = new DataBase();
 const hostPath = `${__dirname}/temp`;
@@ -21,6 +23,7 @@ xMkdirSync(hostPath);
 export default class Clipboard {
     constructor() {
         this.watcherId = null;
+        this.deleteSchedule = null;
         this.previousText = clipboard.readText();
         this.previousImageMd5 = md5(
             clipboard.readImage().toJPEG(jpegQualityHigh)
@@ -34,6 +37,11 @@ export default class Clipboard {
                 Clipboard.writeImage();
             });
         }
+        if (!this.deleteSchedule) {
+            this.deleteSchedule = schedule.scheduleJob('* * 1 * * *', () => {
+                Clipboard.deleteExpiredRecords();
+            });
+        }
         return clipboard;
     };
 
@@ -44,6 +52,31 @@ export default class Clipboard {
         this.watcherId = null;
         return clipboard;
     };
+
+    static deleteExpiredRecords() {
+        const now = Date.now();
+        const expiredTimeStamp = now - 1000 * 60 * 60 * 24 * 7;
+        // delete record in indexDB
+        Db.deleteByTimestamp('text', expiredTimeStamp);
+        Db.deleteByTimestamp('image', expiredTimeStamp);
+
+        // remove jpg with fs
+        const dateDirs = fs.readdirSync(hostPath);
+        dateDirs.forEach(dirName => {
+            if (
+                Number(dirName) <=
+                Number(DateFormat.format(expiredTimeStamp, 'YYYYMMDD'))
+            ) {
+                rimraf(`${hostPath}/${dirName}`, error => {
+                    if (error) {
+                        console.error(error);
+                    }
+                });
+            }
+        });
+    }
+
+    static deleteSavedImage() {}
 
     static writeText() {
         if (Clipboard.isDiffText(this.previousText, clipboard.readText())) {
@@ -66,13 +99,19 @@ export default class Clipboard {
         if (Clipboard.isDiffText(this.previousImageMd5, md5String)) {
             this.previousImageMd5 = md5String;
             if (!nativeImage.isEmpty()) {
-                const path = `${hostPath}/${md5String}.jpeg`;
-                const pathLow = `${hostPath}/${md5StringLow}.jpeg`;
+                const now = Date.now();
+                const pathByDate = `${hostPath}/${DateFormat.format(
+                    now,
+                    'YYYYMMDD'
+                )}`;
+                xMkdirSync(pathByDate);
+                const path = `${pathByDate}/${md5String}.jpeg`;
+                const pathLow = `${pathByDate}/${md5StringLow}.jpeg`;
                 fs.writeFileSync(path, jpegBuffer);
                 fs.writeFileSync(pathLow, jpegBufferLow);
 
                 Db.add('image', {
-                    createTime: Date.now(),
+                    createTime: now,
                     content: path,
                     contentLow: pathLow
                 });
