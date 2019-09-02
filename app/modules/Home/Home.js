@@ -41,6 +41,7 @@ import ClipBoard from '../../utils/Clipboard';
 import DateFormat from '../../utils/DateFormat';
 import useInterval from '../../utils/UseInterval';
 import bannerImage from '../../assets/banner3.jpeg';
+import blankPage from '../../assets/blank.png';
 
 const clipBoard = new ClipBoard();
 clipBoard.startWatching();
@@ -257,6 +258,19 @@ export default function Dashboard() {
         );
     };
 
+    const renderTextList = () => (
+        <FixedSizeList
+            height={clientHeight}
+            width="100%"
+            itemSize={190}
+            itemCount={textList.length}
+            itemData={textList}
+            innerElementType={innerElementType}
+        >
+            {renderTextItem}
+        </FixedSizeList>
+    );
+
     const renderDateImageList = () => (
         <div className={classes.imgRoot}>
             <FixedSizeList
@@ -306,24 +320,36 @@ export default function Dashboard() {
     const renderContentList = () => {
         switch (type) {
             case 'text':
-                return (
-                    <FixedSizeList
-                        height={clientHeight}
-                        width="100%"
-                        itemSize={190}
-                        itemCount={textList.length}
-                        itemData={textList}
-                        innerElementType={innerElementType}
-                    >
-                        {renderTextItem}
-                    </FixedSizeList>
-                );
+                return textList.length ? renderTextList() : renderBlankPage();
             case 'image':
-                return renderDateImageList();
+                return imageList.length
+                    ? renderDateImageList()
+                    : renderBlankPage();
             default:
                 return '未识别的类型';
         }
     };
+
+    const renderBlankPage = () => (
+        <div
+            style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                height: '100%',
+                marginTop: -0.1 * clientHeight,
+                flexDirection: 'column'
+            }}
+        >
+            <img src={blankPage} alt="空白页" />
+            <div>
+                <Typography variant="h6" color="textPrimary">
+                    <span>剪贴板中还没有任何记录哦~</span>
+                </Typography>
+            </div>
+        </div>
+    );
 
     const renderModal = () => (
         <Modal
