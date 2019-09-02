@@ -7,6 +7,7 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Backdrop from '@material-ui/core/Backdrop';
+import Grow from '@material-ui/core/Grow';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -181,60 +182,78 @@ export default function Dashboard() {
     const renderTextItem = props => {
         const { index, data, style } = props;
         const item = data[index];
+        const timeout = index <= 4 ? index * 500 : 5 * 500;
 
         return (
-            <Card
-                className={classes.textCard}
-                key={index}
-                style={{
-                    ...style,
-                    top: style.top + textItemGutter,
-                    height: style.height - textItemGutter
-                }}
+            <Grow
+                in={type === 'text'}
+                style={{ transformOrigin: '0 0 0' }}
+                {...(type === 'text' ? { timeout } : {})}
             >
-                <CardActionArea onClick={() => handleClickText(item.content)}>
-                    <CardMedia
-                        component="img"
-                        className={classes.textMedia}
-                        image={bannerImage}
-                    />
-                    <CardContent className={classes.textItemContentContainer}>
-                        <Typography className={classes.textItemContent}>
-                            {item.content}
-                        </Typography>
-                        <Typography className={classes.textItemTime}>
-                            {DateFormat.format(item.createTime)}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
-            </Card>
+                <Card
+                    className={classes.textCard}
+                    key={index}
+                    style={{
+                        ...style,
+                        top: style.top + textItemGutter,
+                        height: style.height - textItemGutter
+                    }}
+                >
+                    <CardActionArea
+                        onClick={() => handleClickText(item.content)}
+                    >
+                        <CardMedia
+                            component="img"
+                            className={classes.textMedia}
+                            image={bannerImage}
+                        />
+                        <CardContent
+                            className={classes.textItemContentContainer}
+                        >
+                            <Typography className={classes.textItemContent}>
+                                {item.content}
+                            </Typography>
+                            <Typography className={classes.textItemTime}>
+                                {DateFormat.format(item.createTime)}
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                </Card>
+            </Grow>
         );
     };
 
     const renderDateImageItem = props => {
         const { index, data, style } = props;
         const dateImages = data[index];
+        const timeout = index <= 3 ? index * 1000 : 2 * 1000;
 
         return (
-            <GridListTile
-                key={index}
-                style={{
-                    ...style,
-                    top: style.top + textItemGutter,
-                    height: style.height - textItemGutter
-                }}
-                className={classes.gridItem}
+            <Grow
+                in={type === 'image'}
+                style={{ transformOrigin: '0 0 0' }}
+                {...(type === 'image' ? { timeout } : {})}
             >
-                <ListSubheader component="div">
-                    <Typography variant="h6" color="textSecondary">
-                        {DateFormat.format(
-                            dateImages[0].createTime,
-                            'YYYY-MM-DD'
-                        )}
-                    </Typography>
-                </ListSubheader>
-                {renderImageList(dateImages)}
-            </GridListTile>
+                <GridListTile
+                    key={index}
+                    style={{
+                        ...style,
+                        top: style.top + textItemGutter,
+                        height: style.height - textItemGutter
+                    }}
+                    className={classes.gridItem}
+                >
+                    <ListSubheader component="div">
+                        <Typography variant="h6" color="textSecondary">
+                            {DateFormat.format(
+                                dateImages[0].createTime,
+                                'YYYY-MM-DD'
+                            )}
+                        </Typography>
+                    </ListSubheader>
+                    {renderImageList(dateImages)}
+                </GridListTile>
+            </Grow>
         );
     };
 
