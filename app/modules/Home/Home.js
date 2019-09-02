@@ -98,11 +98,8 @@ export default function Dashboard() {
     useInterval(() => {
         const getImageList = async () => {
             const imageArray = await Db.get('image');
-            const avaliableArray = imageArray.filter(
-                item => item.content.length > 'data:image/png;base64,'.length
-            );
 
-            const imageListByDate = splitImageByDate(avaliableArray);
+            const imageListByDate = splitImageByDate(imageArray);
 
             if (JSON.stringify(imageListByDate) !== JSON.stringify(imageList)) {
                 setImageList(imageListByDate);
