@@ -399,6 +399,7 @@ export default function Dashboard() {
             aria-describedby="simple-modal-description"
             open={modalOpen}
             onClose={handleCloseModal}
+            onEscapeKeyDown={handleCloseModal}
             className={classes.modal}
             closeAfterTransition
             BackdropComponent={Backdrop}
