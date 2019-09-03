@@ -27,7 +27,7 @@ export default class Clipboard {
         this.deleteSchedule = null;
         this.previousText = clipboard.readText();
         this.previousImageMd5 = md5(
-            clipboard.readImage().toJPEG(jpegQualityHigh)
+            clipboard.readImage().toJPEG(jpegQualityLow)
         );
     }
 
@@ -91,15 +91,15 @@ export default class Clipboard {
 
     static writeImage() {
         const nativeImage = clipboard.readImage();
-        const jpegBuffer = nativeImage.toJPEG(jpegQualityHigh);
-        const md5String = md5(jpegBuffer);
 
         const jpegBufferLow = nativeImage.toJPEG(jpegQualityLow);
         const md5StringLow = md5(jpegBufferLow);
 
-        if (Clipboard.isDiffText(this.previousImageMd5, md5String)) {
-            this.previousImageMd5 = md5String;
+        if (Clipboard.isDiffText(this.previousImageMd5, md5StringLow)) {
+            this.previousImageMd5 = md5StringLow;
             if (!nativeImage.isEmpty()) {
+                const jpegBuffer = nativeImage.toJPEG(jpegQualityHigh);
+                const md5String = md5(jpegBuffer);
                 const now = Date.now();
                 const pathByDate = `${hostPath}/${DateFormat.format(
                     now,
