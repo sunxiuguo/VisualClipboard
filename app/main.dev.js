@@ -73,7 +73,10 @@ app.on('ready', async () => {
         show: false,
         width: 1024,
         height: 728,
-        titleBarStyle: 'hidden'
+        titleBarStyle: 'hidden',
+        webPreferences: {
+            nodeIntegration: true
+        }
         // icon: __dirname +'app.icns'
     });
 
