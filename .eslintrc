@@ -44,6 +44,7 @@
         "promise/no-native": "off",
         "import/prefer-default-export": "off",
         "react/prop-types": "off",
+        "react/no-danger": "off",
         "react/sort-comp": [
             "error",
             {

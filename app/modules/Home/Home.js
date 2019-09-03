@@ -3,7 +3,6 @@ import React, { forwardRef, useRef } from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -59,16 +58,22 @@ function MadeWithLove() {
     );
 }
 
+const TYPE_MAP = {
+    TEXT: 'text',
+    IMAGE: 'image',
+    HTML: 'html'
+};
+
 const LIST_ITEMS = [
     {
         id: 1,
-        type: 'text',
+        type: TYPE_MAP.HTML,
         label: '文本',
         icon: <TextFieldsIcon />
     },
     {
         id: 2,
-        type: 'image',
+        type: TYPE_MAP.IMAGE,
         label: '图像',
         icon: <ImageIcon />
     }
@@ -81,7 +86,7 @@ const recordListPadding = 32;
 export default function Dashboard() {
     const Db = new DataBase();
     const classes = useStyles();
-    const [type, setType] = React.useState('text');
+    const [type, setType] = React.useState(TYPE_MAP.HTML);
     const [open, setOpen] = React.useState(true);
     const [imageList, setImageList] = React.useState([]);
     const [textList, setTextList] = React.useState([]);
@@ -96,7 +101,7 @@ export default function Dashboard() {
 
     useInterval(() => {
         const getTextList = async () => {
-            let textArray = await Db.get('text');
+            let textArray = await Db.get(TYPE_MAP.HTML);
             if (searchWords) {
                 textArray = textArray.filter(
                     item => item.content.indexOf(searchWords) > -1
@@ -106,14 +111,14 @@ export default function Dashboard() {
                 setTextList(textArray);
             }
         };
-        if (type === 'text') {
+        if (type === TYPE_MAP.HTML) {
             getTextList();
         }
     }, 500);
 
     useInterval(() => {
         const getImageList = async () => {
-            const imageArray = await Db.get('image');
+            const imageArray = await Db.get(TYPE_MAP.IMAGE);
 
             const imageListByDate = splitImageByDate(imageArray);
 
@@ -121,7 +126,7 @@ export default function Dashboard() {
                 setImageList(imageListByDate);
             }
         };
-        if (type === 'image') {
+        if (type === TYPE_MAP.IMAGE) {
             getImageList();
         }
     }, 500);
@@ -233,9 +238,15 @@ export default function Dashboard() {
                         image={bannerImage}
                     />
                     <CardContent className={classes.textItemContentContainer}>
-                        <Typography className={classes.textItemContent}>
-                            {item.content}
-                        </Typography>
+                        <div
+                            dangerouslySetInnerHTML={{ __html: item.content }}
+                            style={{
+                                height: 100,
+                                maxHeight: 100,
+                                width: '100%',
+                                overflow: 'scroll'
+                            }}
+                        />
                         <Typography className={classes.textItemTime}>
                             {DateFormat.format(item.createTime)}
                         </Typography>
@@ -290,7 +301,7 @@ export default function Dashboard() {
         <FixedSizeList
             height={clientHeight}
             width="100%"
-            itemSize={190}
+            itemSize={200}
             itemCount={textList.length}
             itemData={textList}
             innerElementType={innerElementType}
@@ -350,9 +361,9 @@ export default function Dashboard() {
 
     const renderContentList = () => {
         switch (type) {
-            case 'text':
+            case TYPE_MAP.HTML:
                 return textList.length ? renderTextList() : renderBlankPage();
-            case 'image':
+            case TYPE_MAP.IMAGE:
                 return imageList.length
                     ? renderDateImageList()
                     : renderBlankPage();
@@ -422,10 +433,7 @@ export default function Dashboard() {
         }
         if (modalTextContent) {
             return (
-                <TextareaAutosize
-                    defaultValue={modalTextContent}
-                    className={classes.textArea}
-                />
+                <div dangerouslySetInnerHTML={{ __html: modalTextContent }} />
             );
         }
     };
@@ -485,10 +493,12 @@ export default function Dashboard() {
                             open={Boolean(anchorEl)}
                             onClose={handleCloseMenu}
                         >
-                            <MenuItem onClick={() => clearStore('text')}>
+                            <MenuItem onClick={() => clearStore(TYPE_MAP.HTML)}>
                                 清空文本记录
                             </MenuItem>
-                            <MenuItem onClick={() => clearStore('image')}>
+                            <MenuItem
+                                onClick={() => clearStore(TYPE_MAP.IMAGE)}
+                            >
                                 清空图片记录
                             </MenuItem>
                         </Menu>

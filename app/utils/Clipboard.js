@@ -25,7 +25,7 @@ export default class Clipboard {
     constructor() {
         this.watcherId = null;
         this.deleteSchedule = null;
-        this.previousText = clipboard.readText();
+        this.previousHtml = clipboard.readHTML();
         this.previousImageMd5 = md5(
             clipboard.readImage().toJPEG(jpegQualityLow)
         );
@@ -34,8 +34,8 @@ export default class Clipboard {
     startWatching = () => {
         if (!this.watcherId) {
             this.watcherId = schedule.scheduleJob('* * * * * *', () => {
-                Clipboard.writeText();
                 Clipboard.writeImage();
+                Clipboard.writeHtml();
             });
         }
         if (!this.deleteSchedule) {
@@ -58,7 +58,7 @@ export default class Clipboard {
         const now = Date.now();
         const expiredTimeStamp = now - 1000 * 60 * 60 * 24 * 7;
         // delete record in indexDB
-        Db.deleteByTimestamp('text', expiredTimeStamp);
+        Db.deleteByTimestamp('html', expiredTimeStamp);
         Db.deleteByTimestamp('image', expiredTimeStamp);
 
         // remove jpg with fs
@@ -77,14 +77,12 @@ export default class Clipboard {
         });
     }
 
-    static deleteSavedImage() {}
-
-    static writeText() {
-        if (Clipboard.isDiffText(this.previousText, clipboard.readText())) {
-            this.previousText = clipboard.readText();
-            Db.add('text', {
+    static writeHtml() {
+        if (Clipboard.isDiffText(this.previousHtml, clipboard.readHTML())) {
+            this.previousHtml = clipboard.readHTML();
+            Db.add('html', {
                 createTime: Date.now(),
-                content: this.previousText
+                content: this.previousHtml
             });
         }
     }

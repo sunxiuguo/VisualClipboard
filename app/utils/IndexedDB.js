@@ -6,7 +6,7 @@ const { DereplicateArray } = require('./Utils');
 
 export default class DataBase {
     constructor() {
-        this.db = new Dexie('Clipboard-0.18.0');
+        this.db = new Dexie('Clipboard-0.19.0');
         this.init();
     }
 

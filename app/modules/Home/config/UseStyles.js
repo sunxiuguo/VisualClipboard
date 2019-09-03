@@ -149,11 +149,12 @@ const useStyles = makeStyles(theme => ({
         paddingBottom: theme.spacing(2)
     },
     textMedia: {
-        height: 70,
-        minHeight: 70
+        height: 40,
+        minHeight: 40
     },
     textItemContentContainer: {
-        height: 120,
+        height: 160,
+        padding: '10px 8px 20px 8px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around'
