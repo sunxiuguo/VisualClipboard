@@ -107,13 +107,17 @@ export default class Clipboard {
                 xMkdirSync(pathByDate);
                 const path = `${pathByDate}/${md5String}.jpeg`;
                 const pathLow = `${pathByDate}/${md5StringLow}.jpeg`;
-                fs.writeFileSync(path, jpegBuffer);
                 fs.writeFileSync(pathLow, jpegBufferLow);
 
                 Db.add('image', {
                     createTime: now,
                     content: path,
                     contentLow: pathLow
+                });
+                fs.writeFile(path, jpegBuffer, err => {
+                    if (err) {
+                        console.error(err);
+                    }
                 });
             }
         }
