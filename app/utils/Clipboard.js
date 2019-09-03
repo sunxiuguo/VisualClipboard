@@ -1,14 +1,15 @@
 import DataBase from './IndexedDB';
 import DateFormat from './DateFormat';
 
-const { clipboard } = require('electron');
+const { clipboard, remote } = require('electron');
 const schedule = require('node-schedule');
 const md5 = require('md5');
 const fs = require('fs');
 const rimraf = require('rimraf');
 
+const { app } = remote;
 const Db = new DataBase();
-const hostPath = `${__dirname}/temp`;
+const hostPath = `${app.getPath('userData')}/tempClipImages`;
 const jpegQualityLow = 1;
 const jpegQualityHigh = 30;
 
