@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -7,7 +7,9 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Backdrop from '@material-ui/core/Backdrop';
-import Grow from '@material-ui/core/Grow';
+import Fab from '@material-ui/core/Fab';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Zoom from '@material-ui/core/Zoom';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -73,7 +75,8 @@ const LIST_ITEMS = [
 ];
 
 const clientHeight = window.innerHeight || document.body.clientHeight;
-const textItemGutter = 16;
+const recordItemGutter = 16;
+const recordListPadding = 32;
 
 export default function Dashboard() {
     const Db = new DataBase();
@@ -87,6 +90,9 @@ export default function Dashboard() {
     const [modalOpen, setModalOpen] = React.useState(false);
     const [modalImageSrc, setModalImageSrc] = React.useState('');
     const [modalTextContent, setModalTextContent] = React.useState('');
+    const [showScrollTopBtn, setScrollTopBtn] = React.useState(false);
+    const textListRef = useRef(null);
+    const imageListRef = useRef(null);
 
     useInterval(() => {
         const getTextList = async () => {
@@ -134,11 +140,25 @@ export default function Dashboard() {
         return Object.values(dateArrayMap);
     };
 
+    const handleClickScrollTop = () => {
+        const options = {
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        };
+        if (textListRef.current) {
+            textListRef.current.scroll(options);
+        } else if (imageListRef.current) {
+            imageListRef.current.scroll(options);
+        }
+    };
+
     const handleDrawerClose = () => {
         setOpen(!open);
     };
 
     const handleClickItem = _type => {
+        setScrollTopBtn(false);
         setType(_type);
     };
 
@@ -183,78 +203,86 @@ export default function Dashboard() {
     const renderTextItem = props => {
         const { index, data, style } = props;
         const item = data[index];
-        const timeout = index <= 4 ? index * 500 : 5 * 500;
+        // 点击打开modal时会重新触发transition
+        // const timeout = index <= 4 ? index * 500 : 5 * 500;
+        if (index > 5) {
+            setScrollTopBtn(true);
+        } else {
+            setScrollTopBtn(false);
+        }
 
         return (
-            <Grow
-                in={type === 'text'}
-                style={{ transformOrigin: '0 0 0' }}
-                {...(type === 'text' ? { timeout } : {})}
+            // <Grow
+            //     in={type === 'text'}
+            //     style={{ transformOrigin: '0 0 0' }}
+            //     {...(type === 'text' ? { timeout } : {})}
+            // >
+            <Card
+                className={classes.textCard}
+                key={index}
+                style={{
+                    ...style,
+                    top: style.top + recordItemGutter,
+                    height: style.height - recordItemGutter
+                }}
             >
-                <Card
-                    className={classes.textCard}
-                    key={index}
-                    style={{
-                        ...style,
-                        top: style.top + textItemGutter,
-                        height: style.height - textItemGutter
-                    }}
-                >
-                    <CardActionArea
-                        onClick={() => handleClickText(item.content)}
-                    >
-                        <CardMedia
-                            component="img"
-                            className={classes.textMedia}
-                            image={bannerImage}
-                        />
-                        <CardContent
-                            className={classes.textItemContentContainer}
-                        >
-                            <Typography className={classes.textItemContent}>
-                                {item.content}
-                            </Typography>
-                            <Typography className={classes.textItemTime}>
-                                {DateFormat.format(item.createTime)}
-                            </Typography>
-                        </CardContent>
-                    </CardActionArea>
-                </Card>
-            </Grow>
+                <CardActionArea onClick={() => handleClickText(item.content)}>
+                    <CardMedia
+                        component="img"
+                        className={classes.textMedia}
+                        image={bannerImage}
+                    />
+                    <CardContent className={classes.textItemContentContainer}>
+                        <Typography className={classes.textItemContent}>
+                            {item.content}
+                        </Typography>
+                        <Typography className={classes.textItemTime}>
+                            {DateFormat.format(item.createTime)}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+            // </Grow>
         );
     };
 
     const renderDateImageItem = props => {
         const { index, data, style } = props;
         const dateImages = data[index];
-        const timeout = index <= 3 ? index * 1000 : 2 * 1000;
+        // 点击打开modal时会重新触发transition
+        // const timeout = index <= 3 ? index * 1000 : 2 * 1000;
+        if (index > 3) {
+            setScrollTopBtn(true);
+        } else {
+            setScrollTopBtn(false);
+        }
 
         return (
-            <Grow
-                in={type === 'image'}
-                style={{ transformOrigin: '0 0 0' }}
-                {...(type === 'image' ? { timeout } : {})}
+            // <Grow
+            //     in={type === 'image'}
+            //     style={{ transformOrigin: '0 0 0' }}
+            //     {...(type === 'image' ? { timeout } : {})}
+            // >
+            <GridListTile
+                key={index}
+                style={{
+                    ...style,
+                    top: style.top + recordItemGutter,
+                    height: style.height - recordItemGutter
+                }}
+                className={classes.gridItem}
             >
-                <GridListTile
-                    key={index}
-                    style={{
-                        ...style,
-                        top: style.top + textItemGutter,
-                        height: style.height - textItemGutter
-                    }}
-                    className={classes.gridItem}
-                >
-                    <ListSubheader component="div">
-                        <Typography variant="h6" color="textSecondary">
-                            {DateFormat.format(
-                                dateImages[0].createTime,
-                                'YYYY-MM-DD'
-                            )}
-                        </Typography>
-                    </ListSubheader>
-                    {renderImageList(dateImages)}
-                </GridListTile>
-            </Grow>
+                <ListSubheader component="div">
+                    <Typography variant="h6" color="textSecondary">
+                        {DateFormat.format(
+                            dateImages[0].createTime,
+                            'YYYY-MM-DD'
+                        )}
+                    </Typography>
+                </ListSubheader>
+                {renderImageList(dateImages)}
+            </GridListTile>
+            // </Grow>
         );
     };
 
@@ -266,6 +294,7 @@ export default function Dashboard() {
             itemCount={textList.length}
             itemData={textList}
             innerElementType={innerElementType}
+            outerRef={textListRef}
         >
             {renderTextItem}
         </FixedSizeList>
@@ -280,6 +309,7 @@ export default function Dashboard() {
                 itemCount={imageList.length}
                 itemData={imageList}
                 innerElementType={innerElementType}
+                outerRef={imageListRef}
             >
                 {renderDateImageItem}
             </FixedSizeList>
@@ -311,7 +341,8 @@ export default function Dashboard() {
             ref={ref}
             style={{
                 ...style,
-                paddingTop: textItemGutter
+                paddingTop: recordItemGutter,
+                height: `${parseFloat(style.height) + recordListPadding * 2}px`
             }}
             {...rest}
         />
@@ -435,7 +466,7 @@ export default function Dashboard() {
             </Drawer>
             <main className={classes.content}>
                 <AppBar position="static">
-                    <Toolbar>
+                    <Toolbar id="back-to-top-anchor">
                         <IconButton
                             edge="start"
                             className={classes.menuButton}
@@ -487,6 +518,22 @@ export default function Dashboard() {
                 <Container maxWidth="lg" className={classes.container}>
                     {renderContentList()}
                 </Container>
+
+                <Zoom in={showScrollTopBtn}>
+                    <div
+                        onClick={handleClickScrollTop}
+                        role="presentation"
+                        className={classes.scrollTopBtn}
+                    >
+                        <Fab
+                            color="secondary"
+                            size="small"
+                            aria-label="scroll back to top"
+                        >
+                            <KeyboardArrowUpIcon />
+                        </Fab>
+                    </div>
+                </Zoom>
 
                 <MadeWithLove />
             </main>
