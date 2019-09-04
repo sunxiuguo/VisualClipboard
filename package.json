@@ -1,7 +1,7 @@
 {
   "name": "visual-clipboard",
   "productName": "VisualClipboard",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "description": "可视化剪贴板工具",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
