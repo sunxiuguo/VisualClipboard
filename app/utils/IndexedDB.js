@@ -6,7 +6,7 @@ const { DereplicateArray } = require('./Utils');
 
 export default class DataBase {
     constructor() {
-        this.db = new Dexie('Clipboard-0.19.0');
+        this.db = new Dexie('Clipboard-0.20.0');
         this.init();
     }
 
@@ -14,7 +14,7 @@ export default class DataBase {
         this.db.version(1).stores({
             text: '++id,createTime,content',
             image: '++id,createTime,content,contentLow',
-            html: '++id,createTime,content'
+            html: '++id,createTime,content,html'
         });
     }
 

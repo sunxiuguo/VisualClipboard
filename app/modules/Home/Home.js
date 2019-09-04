@@ -45,6 +45,8 @@ import useInterval from '../../utils/UseInterval';
 import bannerImage from '../../assets/banner3.jpeg';
 import blankPage from '../../assets/blank.png';
 
+const { clipboard } = require('electron');
+
 const clipBoard = new ClipBoard();
 clipBoard.startWatching();
 
@@ -179,8 +181,7 @@ export default function Dashboard() {
     };
 
     const handleClickText = content => {
-        setModalTextContent(content);
-        setModalOpen(true);
+        clipboard.writeText(content);
     };
 
     const handleCloseModal = () => {
@@ -246,7 +247,7 @@ export default function Dashboard() {
                     />
                     <CardContent className={classes.textItemContentContainer}>
                         <div
-                            dangerouslySetInnerHTML={{ __html: item.content }}
+                            dangerouslySetInnerHTML={{ __html: item.html }}
                             style={{
                                 height: 330,
                                 maxHeight: 330,

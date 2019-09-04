@@ -25,7 +25,7 @@ export default class Clipboard {
     constructor() {
         this.watcherId = null;
         this.deleteSchedule = null;
-        this.previousHtml = clipboard.readHTML();
+        this.previousText = clipboard.readText();
         this.previousImageMd5 = md5(
             clipboard.readImage().toJPEG(jpegQualityLow)
         );
@@ -78,11 +78,12 @@ export default class Clipboard {
     }
 
     static writeHtml() {
-        if (Clipboard.isDiffText(this.previousHtml, clipboard.readHTML())) {
-            this.previousHtml = clipboard.readHTML();
+        if (Clipboard.isDiffText(this.previousText, clipboard.readText())) {
+            this.previousText = clipboard.readText();
             Db.add('html', {
                 createTime: Date.now(),
-                content: this.previousHtml
+                html: clipboard.readHTML(),
+                content: this.previousText
             });
         }
     }
