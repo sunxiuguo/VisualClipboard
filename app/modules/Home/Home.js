@@ -9,12 +9,13 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fab from '@material-ui/core/Fab';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Zoom from '@material-ui/core/Zoom';
+import AutoSizer from 'react-virtualized-auto-sizer';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { FixedSizeList } from 'react-window';
+import { FixedSizeList, FixedSizeGrid } from 'react-window';
 
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
@@ -206,11 +207,12 @@ export default function Dashboard() {
         ));
 
     const renderTextItem = props => {
-        const { index, data, style } = props;
+        const { columnIndex, rowIndex, data, style } = props;
+        const index = 2 * rowIndex + columnIndex;
         const item = data[index];
         // 点击打开modal时会重新触发transition
         // const timeout = index <= 4 ? index * 500 : 5 * 500;
-        if (index > 5) {
+        if (rowIndex > 3) {
             setScrollTopBtn(true);
         } else {
             setScrollTopBtn(false);
@@ -227,8 +229,10 @@ export default function Dashboard() {
                 key={index}
                 style={{
                     ...style,
+                    left: style.left + recordItemGutter,
                     top: style.top + recordItemGutter,
-                    height: style.height - recordItemGutter
+                    height: style.height - recordItemGutter,
+                    width: style.width - recordItemGutter
                 }}
             >
                 <CardActionArea onClick={() => handleClickText(item.content)}>
@@ -241,10 +245,11 @@ export default function Dashboard() {
                         <div
                             dangerouslySetInnerHTML={{ __html: item.content }}
                             style={{
-                                height: 100,
-                                maxHeight: 100,
+                                height: 330,
+                                maxHeight: 330,
                                 width: '100%',
-                                overflow: 'scroll'
+                                overflow: 'scroll',
+                                marginBottom: 10
                             }}
                         />
                         <Typography className={classes.textItemTime}>
@@ -298,33 +303,41 @@ export default function Dashboard() {
     };
 
     const renderTextList = () => (
-        <FixedSizeList
-            height={clientHeight}
-            width="100%"
-            itemSize={200}
-            itemCount={textList.length}
-            itemData={textList}
-            innerElementType={innerElementType}
-            outerRef={textListRef}
-        >
-            {renderTextItem}
-        </FixedSizeList>
+        <AutoSizer>
+            {({ height, width }) => (
+                <FixedSizeGrid
+                    height={height}
+                    width={width}
+                    columnCount={2}
+                    columnWidth={width / 2}
+                    rowCount={Math.ceil(textList.length / 2)}
+                    rowHeight={400 + recordItemGutter}
+                    innerElementType={gridInnerElementType}
+                    outerRef={textListRef}
+                    itemData={textList}
+                >
+                    {renderTextItem}
+                </FixedSizeGrid>
+            )}
+        </AutoSizer>
     );
 
     const renderDateImageList = () => (
-        <div className={classes.imgRoot}>
-            <FixedSizeList
-                height={clientHeight}
-                width="100%"
-                itemSize={400}
-                itemCount={imageList.length}
-                itemData={imageList}
-                innerElementType={innerElementType}
-                outerRef={imageListRef}
-            >
-                {renderDateImageItem}
-            </FixedSizeList>
-        </div>
+        <AutoSizer>
+            {({ height, width }) => (
+                <FixedSizeList
+                    height={height}
+                    width={width}
+                    itemSize={400}
+                    itemCount={imageList.length}
+                    itemData={imageList}
+                    innerElementType={listInnerElementType}
+                    outerRef={imageListRef}
+                >
+                    {renderDateImageItem}
+                </FixedSizeList>
+            )}
+        </AutoSizer>
     );
 
     const renderImageList = dateImages => (
@@ -347,12 +360,25 @@ export default function Dashboard() {
         </div>
     );
 
-    const innerElementType = forwardRef(({ style, ...rest }, ref) => (
+    const listInnerElementType = forwardRef(({ style, ...rest }, ref) => (
         <div
             ref={ref}
             style={{
                 ...style,
                 paddingTop: recordItemGutter,
+                height: `${parseFloat(style.height) + recordListPadding * 2}px`
+            }}
+            {...rest}
+        />
+    ));
+
+    const gridInnerElementType = forwardRef(({ style, ...rest }, ref) => (
+        <div
+            ref={ref}
+            style={{
+                ...style,
+                paddingTop: recordItemGutter,
+                paddingLeft: recordItemGutter,
                 height: `${parseFloat(style.height) + recordListPadding * 2}px`
             }}
             {...rest}
