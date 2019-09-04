@@ -210,6 +210,9 @@ export default function Dashboard() {
         const { columnIndex, rowIndex, data, style } = props;
         const index = 2 * rowIndex + columnIndex;
         const item = data[index];
+        if (!item) {
+            return null;
+        }
         // 点击打开modal时会重新触发transition
         // const timeout = index <= 4 ? index * 500 : 5 * 500;
         if (rowIndex > 3) {
