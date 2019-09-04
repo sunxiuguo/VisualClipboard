@@ -236,7 +236,7 @@ export default function Dashboard() {
                 key={index}
                 style={{
                     ...style,
-                    left: style.left + recordItemGutter,
+                    left: style.left,
                     top: style.top + recordItemGutter,
                     height: style.height - recordItemGutter,
                     width: style.width - recordItemGutter
@@ -399,7 +399,7 @@ export default function Dashboard() {
             style={{
                 ...style,
                 paddingTop: recordItemGutter,
-                paddingLeft: recordItemGutter,
+                paddingRight: recordItemGutter,
                 height: `${parseFloat(style.height) + recordListPadding * 2}px`
             }}
             {...rest}
