@@ -1,7 +1,9 @@
 /* eslint-disable no-plusplus */
 import React, { forwardRef, useRef } from 'react';
 import clsx from 'clsx';
+import Chip from '@material-ui/core/Chip';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import AlarmIcon from '@material-ui/icons/Alarm';
 import Drawer from '@material-ui/core/Drawer';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
@@ -20,6 +22,7 @@ import { FixedSizeList, FixedSizeGrid } from 'react-window';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -239,7 +242,7 @@ export default function Dashboard() {
                     width: style.width - recordItemGutter
                 }}
             >
-                <CardActionArea onClick={() => handleClickText(item.content)}>
+                <CardActionArea>
                     <CardMedia
                         component="img"
                         className={classes.textMedia}
@@ -249,18 +252,32 @@ export default function Dashboard() {
                         <div
                             dangerouslySetInnerHTML={{ __html: item.html }}
                             style={{
-                                height: 330,
-                                maxHeight: 330,
+                                height: 300,
+                                maxHeight: 300,
                                 width: '100%',
                                 overflow: 'scroll',
                                 marginBottom: 10
                             }}
                         />
-                        <Typography className={classes.textItemTime}>
-                            {DateFormat.format(item.createTime)}
-                        </Typography>
                     </CardContent>
                 </CardActionArea>
+                <CardActions
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
+                    <Chip
+                        variant="outlined"
+                        icon={<AlarmIcon />}
+                        label={DateFormat.format(item.createTime)}
+                    />
+                    <Button
+                        size="small"
+                        color="primary"
+                        variant="contained"
+                        onClick={() => handleClickText(item.content)}
+                    >
+                        复制
+                    </Button>
+                </CardActions>
             </Card>
             // </Grow>
         );

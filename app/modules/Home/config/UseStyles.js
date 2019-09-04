@@ -153,7 +153,7 @@ const useStyles = makeStyles(theme => ({
         minHeight: 50
     },
     textItemContentContainer: {
-        height: 350,
+        height: 300,
         padding: '10px 8px 10px 8px',
         display: 'flex',
         flexDirection: 'column',
