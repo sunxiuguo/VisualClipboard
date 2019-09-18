@@ -1,6 +1,7 @@
 /**
  * notifaction
- * example. showNotification({ title: '您刚刚复制了一串文本' });
+ * example.
+ * showNotification({ title: '您刚刚复制了一串文本' });
  * @param {*} options
  */
 
@@ -20,5 +21,5 @@ function executeNotication(options) {
     const notication = new Notification(options.title, options);
     setTimeout(() => {
         notication.close();
-    }, 2000);
+    }, 1500);
 }

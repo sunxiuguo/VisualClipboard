@@ -47,6 +47,7 @@ import DateFormat from '../../utils/DateFormat';
 import useInterval from '../../utils/UseInterval';
 import bannerImage from '../../assets/banner3.jpeg';
 import blankPage from '../../assets/blank.png';
+import showNotification from '../../utils/Notification';
 
 const { clipboard } = require('electron');
 
@@ -184,6 +185,12 @@ export default function Dashboard() {
     };
 
     const handleClickText = content => {
+        const showLength = 40;
+        const suffix = content.length > showLength ? '...' : '';
+        showNotification({
+            title: '复制成功',
+            body: `${content.substring(0, showLength)}${suffix}`
+        });
         clipboard.writeText(content);
     };
 
