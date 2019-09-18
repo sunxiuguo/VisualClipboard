@@ -5,6 +5,9 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         overflow: 'hidden'
     },
+    drag: {
+        WebkitAppRegion: 'drag'
+    },
     menuButton: {
         marginRight: theme.spacing(2)
     },
@@ -70,6 +73,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'flex-end',
         padding: '0 8px',
         marginTop: theme.spacing(2),
+        WebkitAppRegion: 'drag',
         ...theme.mixins.toolbar
     },
     imgRoot: {

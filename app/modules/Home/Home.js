@@ -521,7 +521,7 @@ export default function Dashboard() {
                 {renderListMenuItems()}
             </Drawer>
             <main className={classes.content}>
-                <AppBar position="static">
+                <AppBar position="static" className={classes.drag}>
                     <Toolbar id="back-to-top-anchor">
                         <IconButton
                             edge="start"
