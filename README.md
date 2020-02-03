@@ -29,3 +29,10 @@ VisualClipBoard 是一款剪贴板工具，能够记录您复制、剪切的所�
 
 ## 打包
 `npm run build`
+
+
+## License
+
+[MIT](http://opensource.org/licenses/MIT)
+
+Copyright (c) 2019 - 2020 sunxiuguo
