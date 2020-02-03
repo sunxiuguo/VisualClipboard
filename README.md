@@ -1,6 +1,6 @@
 <div align="center">
 
-![Visual Clipboard](https://cdn.zhusun.club/image/clipboard/12.png)
+![Visual Clipboard](https://cdn.zhusun.club/image/clipboard/1.png)
 
 </div>
 
