@@ -5,22 +5,26 @@
 </div>
 
 ## 本地运行
-`npm run start `
+
+`npm run start`
 
 ## 打包
+
 `npm run build`
 
 ## 介绍
 
 VisualClipBoard 是一款剪贴板工具，能够记录您复制、剪切的所有图片、文本、超文本历史。  
-此项目基于electron-react-boilerplate搭建, 启动后后台运行, 无论在何处复制都会被记录在visualClipboard中。
+此项目基于 electron-react-boilerplate 搭建, 启动后后台运行, 无论在何处复制都会被记录在 visualClipboard 中。
+
+可以看这篇文章 https://juejin.im/post/5e43bc71e51d45270c27735e
 
 ## 支持格式
 
 -   支持文本
 -   支持图片
 -   支持 excel 表格
--   支持html
+-   支持 html
 
 ## 特性
 
@@ -30,33 +34,34 @@ VisualClipBoard 是一款剪贴板工具，能够记录您复制、剪切的所�
 -   列表瀑布流
 -   列表缩略显示，点击弹窗显示详情
 
-
 ## 背景
-女票：有的时候复制粘贴过的内容还想再看一下，然而又忘了原来的内容是在哪了，找起来还挺麻烦的  
 
-我：看爸爸给你写个app，允你免费试用！  
+女票：有的时候复制粘贴过的内容还想再看一下，然而又忘了原来的内容是在哪了，找起来还挺麻烦的
+
+我：看爸爸给你写个 app，允你免费试用！
 
 女票：？？给你脸了？
 
 ![](https://user-gold-cdn.xitu.io/2020/2/14/17042da62a7e8d56?w=283&h=268&f=jpeg&s=8608)
 
-
 ## 动手
 
 `咳咳 是动手开始写代码, 不是被女票动手打`
 
-虽然从来没写过electron，但是记得这货是支持 [剪贴板API](https://www.electronjs.org/docs/api/clipboard) 的，那就撸袖子开始干，就当练练手了！
+虽然从来没写过 electron，但是记得这货是支持 [剪贴板 API](https://www.electronjs.org/docs/api/clipboard) 的，那就撸袖子开始干，就当练练手了！
 
 首先明确我们的目标：
-* 实时获取系统剪贴板的内容（包括但不限于文本、图像）
-* 存储获取到的信息
-* 展示存储的信息列表
-* 能够快速查看某一项纪录并再次复制
-* 支持关键字搜索
+
+-   实时获取系统剪贴板的内容（包括但不限于文本、图像）
+-   存储获取到的信息
+-   展示存储的信息列表
+-   能够快速查看某一项纪录并再次复制
+-   支持关键字搜索
 
 ### 监听系统剪贴板
 
-监听系统剪贴板，暂时的实现是定时去读剪贴板当前的内容，定时任务使用的是node-schedule，可以很方便地设置频率。
+监听系统剪贴板，暂时的实现是定时去读剪贴板当前的内容，定时任务使用的是 node-schedule，可以很方便地设置频率。
+
 ```javascript
 // 这里是每秒都去拿一次剪贴板的内容，然后进行存储
 startWatching = () => {
@@ -72,10 +77,10 @@ startWatching = () => {
 
 ### 存储
 
-目前只是本地应用，还没有做多端的同步，所以直接用了indexDB来做存储。  
-上面代码中的`Clipboard.writeImage()`以及`Clipboard.writeHtml()`就是向indexDB中写入。
+目前只是本地应用，还没有做多端的同步，所以直接用了 indexDB 来做存储。  
+上面代码中的`Clipboard.writeImage()`以及`Clipboard.writeHtml()`就是向 indexDB 中写入。
 
-* **文本的存储很简单，直接读取，写入即可**
+-   **文本的存储很简单，直接读取，写入即可**
 
 ```javascript
 static writeHtml() {
@@ -90,14 +95,14 @@ static writeHtml() {
 }
 ```
 
-* **图像这里就比较坑了**  
+-   **图像这里就比较坑了**
 
-  `老哥们如果有更好的方法欢迎提出，我学习一波。因为我是第一次写，贼菜，实在没想到其他的方法...`
-1. 从剪贴板读取到的是NativeImage对象  
-2. 本来想转换为base64存储，尝试过后放弃了，因为存储的内容太大了，会非常卡。
-3. 最终实现是将读到的图像存储为本地临时文件,以{md5}.jpeg命名
-4. indexDB中直接存储md5值，使用的时候直接用md5.jpeg访问即可
+    `老哥们如果有更好的方法欢迎提出，我学习一波。因为我是第一次写，贼菜，实在没想到其他的方法...`
 
+1. 从剪贴板读取到的是 NativeImage 对象
+2. 本来想转换为 base64 存储，尝试过后放弃了，因为存储的内容太大了，会非常卡。
+3. 最终实现是将读到的图像存储为本地临时文件,以{md5}.jpeg 命名
+4. indexDB 中直接存储 md5 值，使用的时候直接用 md5.jpeg 访问即可
 
 ```javascript
 static writeImage() {
@@ -136,8 +141,8 @@ static writeImage() {
 }
 ```
 
-* **删除过期的临时图像文件**  
-由于图像文件我们是临时存储在硬盘里的，为了防止存有太多垃圾文件，添加了过期清理的功能。
+-   **删除过期的临时图像文件**  
+    由于图像文件我们是临时存储在硬盘里的，为了防止存有太多垃圾文件，添加了过期清理的功能。
 
 ```javascript
 startWatching = () => {
@@ -148,7 +153,7 @@ startWatching = () => {
     }
     return clipboard;
 };
-    
+
 static deleteExpiredRecords() {
     const now = Date.now();
     const expiredTimeStamp = now - 1000 * 60 * 60 * 24 * 7;
@@ -175,9 +180,9 @@ static deleteExpiredRecords() {
 
 ### 展示列表
 
-上面已经完成了定时的写入db，接下来我们要做的是实时展示db中存储的内容。
+上面已经完成了定时的写入 db，接下来我们要做的是实时展示 db 中存储的内容。
 
-**1. 定义userInterval来准备定时刷新**
+**1. 定义 userInterval 来准备定时刷新**
 
 ```javascript
 /**
@@ -206,9 +211,9 @@ export default function useInterval(callback, delay) {
         }
     }, [delay]);
 }
-
 ```
-**2. 使用userInterval展示列表**
+
+**2. 使用 userInterval 展示列表**
 
 ```javascript
 const [textList, setTextList] = React.useState([]);
@@ -234,6 +239,7 @@ useInterval(() => {
 ### 渲染列表项
 
 我们的列表项中需要包含
+
 1. 主体内容
 2. 剪贴内容的时间
 3. 复制按钮，以更方便地复制列表项内容
@@ -247,13 +253,13 @@ const renderTextItem = props => {
     if (!item) {
         return null;
     }
-    
+
     if (rowIndex > 3) {
         setScrollTopBtn(true);
     } else {
         setScrollTopBtn(false);
     }
-    
+
     return (
         <Card
             className={classes.textCard}
@@ -298,9 +304,10 @@ const renderTextItem = props => {
 };
 ```
 
-**从剪贴板中读到的内容，需要按照原有格式展示**  
+**从剪贴板中读到的内容，需要按照原有格式展示**
 
-恰好`clipboard.readHTML([type])`可以直接读到html内容，那么我们只需要正确展示html内容即可。
+恰好`clipboard.readHTML([type])`可以直接读到 html 内容，那么我们只需要正确展示 html 内容即可。
+
 ```javascript
 <div
     dangerouslySetInnerHTML={{ __html: item.html }}
@@ -323,15 +330,11 @@ const renderTextItem = props => {
         role="presentation"
         className={classes.scrollTopBtn}
     >
-        <Fab
-            color="secondary"
-            size="small"
-            aria-label="scroll back to top"
-        >
+        <Fab color="secondary" size="small" aria-label="scroll back to top">
             <KeyboardArrowUpIcon />
         </Fab>
     </div>
-</Zoom>
+</Zoom>;
 
 const handleClickScrollTop = () => {
     const options = {
@@ -347,8 +350,9 @@ const handleClickScrollTop = () => {
 };
 ```
 
-### 使用react-window优化长列表
-列表元素太多，浏览时间长了会卡顿，使用react-window来优化列表展示，可视区域内只展示固定元素数量。
+### 使用 react-window 优化长列表
+
+列表元素太多，浏览时间长了会卡顿，使用 react-window 来优化列表展示，可视区域内只展示固定元素数量。
 
 ```javascript
 import { FixedSizeList, FixedSizeGrid } from 'react-window';
@@ -371,7 +375,6 @@ const renderDateImageList = () => (
     </AutoSizer>
 );
 ```
-
 
 ## License
 
