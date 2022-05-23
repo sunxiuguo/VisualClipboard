@@ -258,7 +258,7 @@
     "core-js": "^2.6.6",
     "date-fns": "^2.0.1",
     "devtron": "^1.4.0",
-    "dexie": "^2.0.4",
+    "dexie": "^3.2.2",
     "electron-debug": "^3.0.1",
     "electron-log": "^3.0.7",
     "electron-updater": "^4.0.0",
